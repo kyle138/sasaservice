@@ -1,24 +1,25 @@
-/**
- *
- * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
- * @param {Object} event - API Gateway Lambda Proxy Input Format
- *
- * Context doc: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html 
- * @param {Object} context
- *
- * Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
- * @returns {Object} object - API Gateway Lambda Proxy Output Format
- * 
- */
+//
+// get.mjs
+// Lambda that lists to APIG GET requests.
+// Expects no inputs, returns random 'S'
+//
+
+// Load modules
+import createResponseObject from 'create-response-object';
+import { Buncha_Ss } from 'is_letter_s';
+
 
 export const handler = async (event, context) => {
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'hello world',
-      })
-    };
 
-    return response;
-  };
+  // For GET requests, simply return a random entry from Buncha_Ss
+  const entries = [...Buncha_Ss.entries()];
+  const randomEntry = entries[Math.floor(Math.random() * entries.length)];
+  console.debug(`randomEntry: ${randomEntry}`); // DEBUG
+
+  return createResponseObject({
+    code: '200',
+    message: randomEntry,
+  });
+
+};
   

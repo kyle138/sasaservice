@@ -1,8 +1,8 @@
 {
-  "name": "sam-handlerrors",
+  "name": "sasaservice",
   "version": "1.0.0",
   "dependencies": {
     "create-response-object": "1.3.0",
-    "is_letter_s": "^1.0.0"
+    "is_letter_s": "^1.1.0"
   }
 }

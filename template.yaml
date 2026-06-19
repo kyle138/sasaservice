@@ -97,7 +97,7 @@ Resources:
         Aliases:
           - !Ref DomainName
         ViewerCertificate:
-          AcmCertificateArn: !Sub "arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${AcmCertificateId}"
+          AcmCertificateArn: !Sub "arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${AcmCertificateId}"
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
         CustomErrorResponses:
@@ -120,12 +120,18 @@ Resources:
             DomainName: !Sub "${SaasApi}.execute-api.${AWS::Region}.amazonaws.com"
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
+            OriginPath: "/prod"
         # Default routing to S3 static 
         DefaultCacheBehavior:
           TargetOriginId: S3Origin
           ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods: [GET, HEAD, OPTIONS]
-          CachedMethods: [GET, HEAD]
+          AllowedMethods:
+            - HEAD
+            - GET
+            - OPTIONS
+          CachedMethods:
+            - HEAD
+            - GET
           ForwardedValues:
             QueryString: false
             Cookies:
@@ -135,8 +141,17 @@ Resources:
           - PathPattern: /v1/*
             TargetOriginId: ApigOrigin
             ViewerProtocolPolicy: redirect-to-https
-            AllowedMethods: [GET, HEAD, POST, PUT, PATCH, OPTIONS]
-            CachedMethods: [HEAD]
+            AllowedMethods: 
+              - HEAD
+              - DELETE
+              - POST
+              - GET
+              - OPTIONS
+              - PUT
+              - PATCH
+            # CachedMethods: 
+            #   - HEAD
+            #   - GET
             DefaultTTL: 0 # To bypass CDN cache for dynami API calls
             MaxTTL: 0
             MinTTL: 0
@@ -156,9 +171,9 @@ Resources:
           - Sid: AllowCloudFrontServicePrincipalReadOnly
             Effect: Allow
             Principal:
-              Service: ://amazonaws.com
+              Service: cloudfront.amazonaws.com
             Action: s3:GetObject
-            Resource: !Sub "${WebsiteBucket.Arn}"
+            Resource: !Sub "${WebsiteBucket.Arn}/*"
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${WebsiteDistribution}"
@@ -169,4 +184,4 @@ Outputs:
     Value: !Sub "https://${DomainName}"
   BackendApiURL:
     Description: Unified APIG endpoint via CF
-    Value: !Sub "https://${DomainName}/api/v1"
+    Value: !Sub "https://${DomainName}/v1"

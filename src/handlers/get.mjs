@@ -11,6 +11,8 @@ import { Buncha_Ss } from 'is_letter_s';
 
 export const handler = async (event, context) => {
 
+  console.log(`Received event: ${JSON.stringify(event,null,2)}`); // DEBUG:
+
   // For GET requests, simply return a random entry from Buncha_Ss
   const entries = [...Buncha_Ss.entries()];
   const randomEntry = entries[Math.floor(Math.random() * entries.length)];

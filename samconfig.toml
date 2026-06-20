@@ -4,10 +4,7 @@ version = 0.1
 
 [default.global.parameters]
 stack_name = "sasaservice"
-[[tags]]
-stack = "sasaservice"
 region = "us-east-2"
-
 [default.build.parameters]
 cached = true
 parallel = true
@@ -19,6 +16,9 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
+s3_prefix = "sasaservice"
+parameter_overrides = "DomainName=\"sasaservice.com\" AcmCertificateId=\"f5688c2b-5cba-480b-aa4c-110de8bf829b\""
+image_repositories = []
 
 [default.package.parameters]
 resolve_s3 = true
@@ -31,3 +31,7 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+[[tags]]
+stack = "sasaservice"
+region = "us-east-2"
+

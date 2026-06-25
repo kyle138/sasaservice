@@ -28,7 +28,8 @@ Resources:
       Cors: 
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-        AllowOrigin: !Sub "'https://${DomainName}'"
+        # AllowOrigin: !Sub "'https://${DomainName}'"
+        AllowOrigin: "'*'"
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:

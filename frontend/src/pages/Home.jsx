@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import reactLogo from '../assets/react.svg'
 import viteLogo from '../assets/vite.svg'
 import heroImg from '../assets/hero.png'
@@ -7,7 +6,58 @@ import heroImg from '../assets/hero.png'
 
 
 function Home() {
-    const [count, setCount] = useState(0)
+    const [message, setMessage] = useState("Loading...");
+    const [letter, setLetter] = useState('');
+
+    const API = 'https://sasaservice.com/v1/';
+
+  // ****************
+  // Make API request
+  useEffect(() => {
+    fetch(API)
+    .then((resp) => resp.json())
+    .then((data) => {
+      const response = JSON.parse(data.response);
+      console.debug(`Get response: ${JSON.stringify(data.response,null,2)}`); // DEBUG
+      setMessage(`${response?.letter}: ${response?.description}`);
+    })
+    .catch((err) => {
+      console.error(`GET error: `,err);
+      setMessage('Failed to connect to backend.')}
+    );
+  }, []);
+
+  function handleLetter(e) {
+    if (e.target.value.length > 1) return;
+
+    setLetter(e.target.value);
+
+    setMessage(`Checking letter ${e.target.value}...`);
+
+    fetch(API, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({letter: e.target.value, verbose: true})
+    })
+    .then((resp) => resp.json())
+    .then((data) => {
+      // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
+      const response = JSON.parse(data.response);
+      console.debug(`Post response: ${JSON.stringify(response,null,2)}`); // DEBUG
+      setMessage(`${e.target.value} is an 'S': ${response?.verdict}<br/>Description: ${response?.description}`);
+    })
+    .catch((err) => {
+      console.error(`POST error: `,err);
+      setMessage('Failed to connect to backend.');
+    });
+
+    // fetchOptions.method = "POST";
+    // fetchOptions.body = JSON.stringify({letter: e.target.value, verbose: true});
+    // setLetter(e.target.value);
+
+  } // End handleLetter
 
   return (
     <>
@@ -23,13 +73,19 @@ function Home() {
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+        <p>{message}</p>
+        {}
+        <form>
+          <label>Enter an S:
+            <input 
+              id='letter-input'
+              type="text"
+              maxLength={1}
+              value={letter}
+              onChange={handleLetter}
+            />
+          </label>
+        </form>
       </section>
 
       <div className="ticks"></div>

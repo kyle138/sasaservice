@@ -19,6 +19,7 @@ function Home() {
     .then((data) => {
       const response = JSON.parse(data.response);
       console.debug(`Get response: ${JSON.stringify(data.response,null,2)}`); // DEBUG
+      setLetter(response.letter || '');
       setMessage(`${response?.letter}: ${response?.description}`);
     })
     .catch((err) => {
@@ -28,7 +29,10 @@ function Home() {
   }, []);
 
   function handleLetter(e) {
-    if (e.target.value.length > 1) return;
+    if (e.target.value.length != 1) {
+      setLetter('');
+      return;
+    }
 
     setLetter(e.target.value);
 
@@ -82,6 +86,7 @@ function Home() {
               type="text"
               maxLength={1}
               value={letter}
+              onFocus={(event) => event.target.select()}
               onChange={handleLetter}
             />
           </label>

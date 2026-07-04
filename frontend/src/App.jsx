@@ -10,7 +10,7 @@ function App() {
       {/* Navigation */}
       <nav>
         <NavLink to="/">Home</NavLink> |{" "}
-        <NavLink to="/about">API</NavLink>
+        <NavLink to="/about">API</NavLink> |{" "}
         <NavLink to="/contact">Contact</NavLink>
       </nav>
 

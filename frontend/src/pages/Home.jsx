@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import reactLogo from '../assets/react.svg'
-import viteLogo from '../assets/vite.svg'
-import heroImg from '../assets/hero.png'
-import coolS from '../assets/coolS.svg';
+import Container from 'react-bootstrap/Container';
+import CoolS from '../assets/CoolS.svg';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import Form from 'react-bootstrap/Form';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 
 function Home() {
-    const [message, setMessage] = useState("Loading...");
+    const [message, setMessage] = useState("Here's a free random 'S'!");
+    const [response, setResponse] = useState(<p>Loading...</p>);
     const [letter, setLetter] = useState('');
 
     const API = 'https://sasaservice.com/v1/';
@@ -17,17 +22,36 @@ function Home() {
     fetch(API)
     .then((resp) => resp.json())
     .then((data) => {
-      const response = JSON.parse(data.response);
+      const resp = JSON.parse(data.response);
       console.debug(`Get response: ${JSON.stringify(data.response,null,2)}`); // DEBUG
-      setLetter(response.letter || '');
-      setMessage(`${response?.letter}: ${response?.description}`);
+      setLetter(resp.letter || '');
+      setResponse(<p>Letter: {resp?.letter}<br/>Description: {resp?.description}</p>);
     })
     .catch((err) => {
       console.error(`GET error: `,err);
-      setMessage('Failed to connect to backend.')}
+      setResponse(<p>Failed to connect to backend.</p>)}
     );
   }, []);
 
+  // Reset the form when logo clicked
+  function handleLogo() {
+    setResponse(<p>Loading...</p>);
+    setMessage("Here's a free random 'S'!");
+    
+    fetch(API)
+    .then((resp) => resp.json())
+    .then((data) => {
+      const resp = JSON.parse(data.response);
+      setLetter(resp.letter || '');
+      setResponse(<p>Letter: {resp?.letter}<br/>Description: {resp?.description}</p>);
+    })
+    .catch((err) => {
+      console.error(`GET error: `,err);
+      setResponse(<p>Failed to connect to backend.</p>);
+    }); // End fetch
+  } // End handleLogo
+
+  // Test if supplied letter is an 'S'
   function handleLetter(e) {
     if (e.target.value.length != 1) {
       setLetter('');
@@ -36,7 +60,7 @@ function Home() {
 
     setLetter(e.target.value);
 
-    setMessage(`Checking letter ${e.target.value}...`);
+    setResponse(<p>Checking letter {e.target.value}...</p>);
 
     fetch(API, {
       method: "POST",
@@ -48,141 +72,75 @@ function Home() {
     .then((resp) => resp.json())
     .then((data) => {
       // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
-      const response = JSON.parse(data.response);
-      console.debug(`Post response: ${JSON.stringify(response,null,2)}`); // DEBUG
-      setMessage(`${e.target.value} is an 'S': ${response?.verdict}<br/>Description: ${response?.description}`);
+      const resp = JSON.parse(data.response);
+      console.debug(`Post response: ${JSON.stringify(resp,null,2)}`); // DEBUG
+
+      // Set the "is an | is not an | etc... based on verdict"
+      const isAn = resp?.verdict 
+               ? resp?.verdict == "¯\\_(ツ)_/¯" 
+                  ? `Is ${e.target.value} an 'S'?`
+                  : `${e.target.value} is an 'S'` 
+               : `The letter '${e.target.value}' is NOT an 'S'`;
+
+      setMessage(`You asked to check: ${e.target.value}`);
+      setResponse(<p>Verdict: {resp.verdict.toString()}<br/>{isAn}<br/>Description: {resp?.description}.</p>);
     })
     .catch((err) => {
       console.error(`POST error: `,err);
-      setMessage('Failed to connect to backend.');
+      setResponse(<p>Failed to connect to backend.</p>);
     });
-
-    // fetchOptions.method = "POST";
-    // fetchOptions.body = JSON.stringify({letter: e.target.value, verbose: true});
-    // setLetter(e.target.value);
 
   } // End handleLetter
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <img src={coolS} alt="S" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <p>{message}</p>
-        {}
-        <form>
-          <label>Enter an S:
-            <input 
-              id='letter-input'
-              type="text"
-              maxLength={1}
-              value={letter}
-              onFocus={(event) => event.target.select()}
-              onChange={handleLetter}
+    <Container className='vt323-regular crt'>
+      <Row className='py-2 text-center'>
+        <Col>
+          <OverlayTrigger
+            delay={{ show: 138, hide: 400 }}
+            overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
+          >
+            <Image 
+              src={CoolS} 
+              alt="S" 
+              onClick={handleLogo}
             />
-          </label>
-        </form>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-};
+          </OverlayTrigger>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h1 className='vt323-regular vt323-green'>{message}</h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col>{response}</Col>
+      </Row>
+      <Row className='pt-5'>
+        <Col>
+          <h1 className='vt323-regular vt323-green'>Or enter your own letter to check:</h1>
+        </Col>
+      </Row>
+      <Form.Group as={Row} id='letter-input-group'>
+        <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
+        <Col sm={3} className='invFormInput ps-0'>
+          <Form.Control
+            id="letter-input"
+            type="text"
+            maxLength={1}
+            value={letter}
+            onFocus={(event) => event.target.select()}
+            onChange={handleLetter}
+          />
+        </Col>
+      </Form.Group>
+      <Row className='pt-5 pb-2'>
+        <Col>
+          <p className='text-end'>© 2026</p>
+        </Col>
+      </Row>
+    </Container>
+  ); // End return
+};  // End home
 
 export default Home;

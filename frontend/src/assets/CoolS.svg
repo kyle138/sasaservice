@@ -3,12 +3,12 @@
     <linearGradient id="upgrad" x1="0%" y1="100%" x2="0%" y2="0%">
       <stop offset="0%" stop-color="orange" stop-opacity="0" />
       <stop offset="50%" stop-color="orange" stop-opacity="1" />
-      <stop offset="100%" stop-color="blue" stop-opacity="0" />
+      <stop offset="100%" stop-color="#00ff00" stop-opacity="0" />
     </linearGradient>
     <linearGradient id="downgrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="orange" stop-opacity="0" />
       <stop offset="50%" stop-color="orange" stop-opacity="1" />
-      <stop offset="100%" stop-color="blue" stop-opacity="0" />
+      <stop offset="100%" stop-color="#00ff00" stop-opacity="0" />
     </linearGradient>
     <mask id="path-mask">
       <path d="M 50 130 v -30 l -30 -30 v -30 l 30 -30 l 30 30 v 30 l -15 15" 
@@ -29,14 +29,14 @@
   </defs>
 
   <path d="M 50 130 v -30 l -30 -30 v -30 l 30 -30 l 30 30 v 30 l -15 15" 
-    stroke="blue" 
+    stroke="#00ff00" 
     fill="none"
     stroke-width="8"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path d="M 50 40 v 30 l 30 30 v 30 l -30 30 l -30 -30 v -30 l 15 -15" 
-    stroke="blue" 
+    stroke="#00ff00" 
     fill="none"
     stroke-width="8"
     stroke-linecap="round"

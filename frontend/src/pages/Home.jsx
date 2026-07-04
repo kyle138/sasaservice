@@ -51,6 +51,7 @@ function Home() {
     }); // End fetch
   } // End handleLogo
 
+
   // Test if supplied letter is an 'S'
   function handleLetter(e) {
     if (e.target.value.length != 1) {
@@ -59,7 +60,6 @@ function Home() {
     }
 
     setLetter(e.target.value);
-
     setResponse(<p>Checking letter {e.target.value}...</p>);
 
     fetch(API, {
@@ -88,7 +88,7 @@ function Home() {
     .catch((err) => {
       console.error(`POST error: `,err);
       setResponse(<p>Failed to connect to backend.</p>);
-    });
+    }); // End fetch
 
   } // End handleLetter
 

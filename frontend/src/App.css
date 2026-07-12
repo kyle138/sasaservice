@@ -1,3 +1,9 @@
+body {
+  background-color: #131313;
+}
+#footer {
+  color: #414549;
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;

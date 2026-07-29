@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -8,11 +10,23 @@ function App() {
   return (
     <BrowserRouter>
       {/* Navigation */}
-      <nav>
-        <NavLink to="/">Home</NavLink> |{" "}
-        <NavLink to="/about">API</NavLink> |{" "}
-        <NavLink to="/contact">Contact</NavLink>
-      </nav>
+      <Navbar id="navbar" expand="md" className="pb-0 border-bottom">
+        <Navbar.Brand href="/">'S'asaService</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className='me-auto' variant="tabs" activeKey={location.pathname}>
+            <Nav.Item className='mx-3'>
+              <Nav.Link href="/">Home</Nav.Link>
+            </Nav.Item>
+            <Nav.Item className='mx-3'>
+              <Nav.Link href="/about">API</Nav.Link>
+            </Nav.Item>
+            <Nav.Item className='mx-3'>
+              <Nav.Link href="/contact">Contact</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
       {/* Routes */}
       <Routes>

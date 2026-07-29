@@ -7,14 +7,22 @@ import Image from 'react-bootstrap/Image';
 import Form from 'react-bootstrap/Form';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Button from 'react-bootstrap/Button';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 
 
 function Home() {
-    const [message, setMessage] = useState("Here's a free random 'S'!");
+    const [interactive, setInteractive] = useState(false);
     const [response, setResponse] = useState(<p>Loading...</p>);
     const [letter, setLetter] = useState('');
 
     const API = 'https://sasaservice.com/v1/';
+
+    const rads = [
+      {value: 'int', label: "Interactive Mode"},
+      {value: 'rdm', label: "Random 'S'"}
+    ];
 
   // ****************
   // Make API request
@@ -36,7 +44,7 @@ function Home() {
   // Reset the form when logo clicked
   function handleLogo() {
     setResponse(<p>Loading...</p>);
-    setMessage("Here's a free random 'S'!");
+    setInteractive(false);
     
     fetch(API)
     .then((resp) => resp.json())
@@ -51,6 +59,12 @@ function Home() {
     }); // End fetch
   } // End handleLogo
 
+  // toggle between interactive mode
+  function handleInteractive() {
+    if(interactive) handleLogo();
+    setInteractive(!interactive);
+    console.log(`interactive: ${interactive}`); //DEBUG
+  } // End handleInteractive
 
   // Test if supplied letter is an 'S'
   function handleLetter(e) {
@@ -82,7 +96,6 @@ function Home() {
                   : `${e.target.value} is an 'S'` 
                : `The letter '${e.target.value}' is NOT an 'S'`;
 
-      setMessage(`You asked to check: ${e.target.value}`);
       setResponse(<p>Verdict: {resp.verdict.toString()}<br/>{isAn}<br/>Description: {resp?.description}.</p>);
     })
     .catch((err) => {
@@ -92,8 +105,52 @@ function Home() {
 
   } // End handleLetter
 
+  // Displays the random 'S' or Interactive field
+  function Console() {
+    if (interactive) {
+      return (
+        <>
+          <Row className='pt-5'>
+            <Col>
+              <h1 className='vt323-regular vt323-green'>Enter your own letter to check:</h1>
+            </Col>
+          <Form.Group as={Row} id='letter-input-group'>
+            <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
+            <Col sm={3} className='invFormInput ps-0'>
+              <Form.Control
+                id="letter-input"
+                type="text"
+                maxLength={1}
+                value={letter}
+                onFocus={(event) => event.target.select()}
+                onChange={handleLetter}
+                />
+            </Col>
+          </Form.Group>
+                </Row>
+          <Row>
+            <Col>{response}</Col>
+          </Row>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Row className='pt-5'>
+            <Col>
+              <h1 className='vt323-regular vt323-green'>Here's a free random 'S'!</h1>
+            </Col>
+          </Row>
+          <Row>
+            <Col>{response}</Col>
+          </Row>
+        </>
+      );
+    }
+  } // End random
+
   return (
-    <Container className='vt323-regular crt'>
+    <Container className='vt323-regular crt ps-5'>
       <Row className='py-2 text-center'>
         <Col>
           <OverlayTrigger
@@ -107,34 +164,37 @@ function Home() {
             />
           </OverlayTrigger>
         </Col>
-      </Row>
-      <Row>
         <Col>
-          <h1 className='vt323-regular vt323-green'>{message}</h1>
+          <Row>
+            <ToggleButtonGroup 
+              vertical
+              name="intrdm"
+              type="radio"
+              className="py-4 pe-5"
+              value="interactive"
+              onChange={handleInteractive}
+              >
+              {rads.map((rad, idx) => (
+                <ToggleButton
+                  key={`radv${idx}`}
+                  id={`radv${idx}`}
+                  size="lg"
+                  className='text-start rounded-0 btn-secondary rad'
+                  value="rad.value"
+                  checked={true}
+                  disabled={idx === (interactive ? 0 : 1)}
+                  >
+                  <h2 className='vt323-regular vt323-green'>
+                    { (idx === (interactive ? 0 : 1) ? ">>\u00A0" : "\u00A0\u00A0\u00A0")+rad.label }
+                  </h2>
+                </ToggleButton>
+              ))}  
+            </ToggleButtonGroup>
+          </Row>
         </Col>
       </Row>
-      <Row>
-        <Col>{response}</Col>
-      </Row>
-      <Row className='pt-5'>
-        <Col>
-          <h1 className='vt323-regular vt323-green'>Or enter your own letter to check:</h1>
-        </Col>
-      </Row>
-      <Form.Group as={Row} id='letter-input-group'>
-        <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
-        <Col sm={3} className='invFormInput ps-0'>
-          <Form.Control
-            id="letter-input"
-            type="text"
-            maxLength={1}
-            value={letter}
-            onFocus={(event) => event.target.select()}
-            onChange={handleLetter}
-          />
-        </Col>
-      </Form.Group>
-      <Row className='pt-5 pb-2'>
+      <Console />
+      <Row className='pt-5 pb-2 pe-5'>
         <Col>
           <p className='text-end'>© 2026</p>
         </Col>

@@ -1,6 +1,10 @@
 body {
   background-color: #131313;
 }
+
+#root {
+  border: none;
+}
 #footer {
   color: #414549;
 }
@@ -65,6 +69,20 @@ body {
 #letter-input {
   background-color: #d3d3d3;
   border-color: #A7C942;
+}
+
+.rad {
+  background-color: #302831;
+  border-color: #A7C942;
+}
+
+.rad.disabled {
+  background-color: #306831;
+  border-color: #A7C942;
+}
+
+.rad.disabled h2 {
+  color: #131313;
 }
 
 .cursor {

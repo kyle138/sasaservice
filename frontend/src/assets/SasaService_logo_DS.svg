@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1680mm"
+   height="200mm"
+   viewBox="0 0 1680 200"
+   version="1.1"
+   id="svg3349"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="SasaService_logo_DS.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3351"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.22977803"
+     inkscape:cx="3187.8592"
+     inkscape:cy="561.41138"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs3346">
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter2014"
+       x="-0.0077204376"
+       y="-0.096635492"
+       width="1.0173472"
+       height="1.2330387">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(245,220,107)"
+         result="flood"
+         id="feFlood2004" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite2006" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="5"
+         result="blur"
+         id="feGaussianBlur2008" />
+      <feOffset
+         dx="3"
+         dy="5"
+         result="offset"
+         id="feOffset2010" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite2012" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:211.667px;font-family:'Galactic Storm Halftone Italic';-inkscape-font-specification:'Galactic Storm Halftone Italic, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:5.29167px;fill:#a7c942;stroke:#000000;stroke-width:0.3;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter2014)"
+       x="39.103859"
+       y="159.57344"
+       id="text7102"><tspan
+         sodipodi:role="line"
+         id="tspan7100"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:211.667px;font-family:'Galactic Storm Halftone Italic';-inkscape-font-specification:'Galactic Storm Halftone Italic, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.3;stroke:#000000;stroke-opacity:1;stroke-dasharray:none"
+         x="39.103859"
+         y="159.57344">'S' as a Service</tspan></text>
+  </g>
+</svg>

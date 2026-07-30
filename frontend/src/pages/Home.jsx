@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
+import Logo from '../assets/SasaService_logo_DS.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
@@ -110,7 +111,7 @@ function Home() {
     if (interactive) {
       return (
         <>
-          <Row className='pt-5'>
+          <Row className='pt-5 ps-5'>
             <Col>
               <h1 className='bitcount vt323-green fs-2'>Enter your own letter to check:</h1>
             </Col>
@@ -136,12 +137,12 @@ function Home() {
     } else {
       return (
         <>
-          <Row className='pt-5'>
+          <Row className='pt-5 ps-5'>
             <Col>
               <h1 className='bitcount vt323-green fs-1'>Here's a free random 'S'!</h1>
             </Col>
           </Row>
-          <Row>
+          <Row className='ps-5'>
             <Col>{response}</Col>
           </Row>
         </>
@@ -150,8 +151,20 @@ function Home() {
   } // End random
 
   return (
-    <Container className='vt323-regular crt ps-5'>
-      <Row className='py-2 text-center'>
+    <Container className='vt323-regular crt mb-5'>
+      <Row className='pt-4 pb-2'>
+        <OverlayTrigger
+          delay={{ show: 138, hide: 400 }}
+          overlay={<Tooltip id="LogoTip">'S' as a Service, redefining Saas!</Tooltip>}
+        >
+          <Image
+            id="logo"
+            src={Logo}
+            alt="'S' as a Service, redefining Saas!"
+          />
+        </OverlayTrigger>
+      </Row>
+      <Row className='py-2 ps-5 text-center'>
         <Col xs={4} md={6}>
           <OverlayTrigger
             delay={{ show: 138, hide: 400 }}
@@ -194,7 +207,7 @@ function Home() {
         </Col>
       </Row>
       <Console />
-      <Row className='pt-5 pb-2 pe-5'>
+      <Row className='pt-4 pb-3 pe-5'>
         <Col>
           <p className='text-end'>© 2026</p>
         </Col>

@@ -152,7 +152,7 @@ function Home() {
   return (
     <Container className='vt323-regular crt ps-5'>
       <Row className='py-2 text-center'>
-        <Col>
+        <Col xs={4} md={6}>
           <OverlayTrigger
             delay={{ show: 138, hide: 400 }}
             overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
@@ -164,7 +164,7 @@ function Home() {
             />
           </OverlayTrigger>
         </Col>
-        <Col>
+        <Col xs={8} md={6}>
           <Row>
             <ToggleButtonGroup 
               vertical

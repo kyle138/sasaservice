@@ -10,6 +10,10 @@ body {
   color: #414549;
 }
 
+.container {
+  min-width: 320px;
+}
+
 .navbar {
   border-color: #A7C942;
   --bs-border-color: #A7C942;
@@ -38,7 +42,7 @@ body {
 }
 
 /* Styles applied ONLY when the navbar is collapsed*/
-@media (max-width: 991.98px) {
+@media (max-width: 767.98px) {
   .nav-tabs .nav-link {
     /* Restore the full 4-sided border for stacked items */
     border: 1px solid #A7C942 !important;

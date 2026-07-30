@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       {/* Navigation */}
-      <Navbar id="navbar" expand="md" className="pb-0 border-bottom">
+      <Navbar id="navbar" expand="md" className="pb-0">
         <Navbar.Brand href="/">'S'asaService</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

@@ -108,6 +108,11 @@ body {
   min-height: 60vh;
 }
 
+.bitcount {
+  font-family: 'Bitcount Grid Double Variable', monospace;
+  font-weight: 400;
+}
+
 .ascii {
   white-space: pre;
   line-height: normal;

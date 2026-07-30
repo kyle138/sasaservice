@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 import App from './App.jsx'
 import '@fontsource/vt323';
+import '@fontsource-variable/bitcount-grid-double/wght.css';
 
 const container = document.getElementById('root');
 

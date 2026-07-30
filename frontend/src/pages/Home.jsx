@@ -112,7 +112,7 @@ function Home() {
         <>
           <Row className='pt-5'>
             <Col>
-              <h1 className='vt323-regular vt323-green'>Enter your own letter to check:</h1>
+              <h1 className='bitcount vt323-green fs-2'>Enter your own letter to check:</h1>
             </Col>
           <Form.Group as={Row} id='letter-input-group'>
             <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
@@ -138,7 +138,7 @@ function Home() {
         <>
           <Row className='pt-5'>
             <Col>
-              <h1 className='vt323-regular vt323-green'>Here's a free random 'S'!</h1>
+              <h1 className='bitcount vt323-green fs-1'>Here's a free random 'S'!</h1>
             </Col>
           </Row>
           <Row>

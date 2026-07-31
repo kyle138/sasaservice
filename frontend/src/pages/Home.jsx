@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
-import Logo from '../assets/SasaService_logo_tri_DS_sub_alpha.svg';
+import Logo from '../assets/SasaService_logo_tri_cont_DS_sub_alpha.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';

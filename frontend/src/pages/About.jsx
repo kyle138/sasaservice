@@ -27,6 +27,11 @@ function About() {
         <h1>About</h1>
         <p>Make look pretty later...</p>
       </Row>
+      <Row className='pt-4 pb-3 pe-5'>
+        <Col>
+          <p className='text-end'>© 2026</p>
+        </Col>
+      </Row>
     </Container>
   )
 };

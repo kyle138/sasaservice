@@ -129,7 +129,7 @@ function Home() {
             </Col>
           </Form.Group>
                 </Row>
-          <Row>
+          <Row className="ps-5">
             <Col>{response}</Col>
           </Row>
         </>

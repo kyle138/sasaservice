@@ -32,6 +32,11 @@ body {
   --bs-border-color: #A7C942;
 }
 
+.navbar-brand {
+  padding-bottom: 0;
+}
+
+
 .nav-tabs {
   border-bottom: none;
   --bs-nav-tabs-border-color: #A7C942;

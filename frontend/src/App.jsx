@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
+import Brand from './assets/SaaS_logo_DS_sub_alpha.svg';
+import Image from 'react-bootstrap/Image';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Home from './pages/Home';
@@ -11,7 +13,14 @@ function App() {
     <BrowserRouter>
       {/* Navigation */}
       <Navbar id="navbar" expand="md" className="pb-0">
-        <Navbar.Brand href="/">'S'asaService</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <Image 
+            src={Brand}
+            alt="'S'aaS"
+            width="138"
+            className='pb-0 ms-3'
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className='me-auto' variant="tabs" activeKey={location.pathname}>

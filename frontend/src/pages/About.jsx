@@ -1,9 +1,8 @@
-import React from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
-import Logo from '../assets/SasaService_logo_tri_DS_sub_alpha.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { Link } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -61,6 +60,7 @@ function About() {
           <h1 className='bitcount vt323-green fs-1'>
             GET
           </h1>
+          <h2 className='bitcount vt323-green'>Random 'S'</h2>
         </Col>
         <Col sm={9}>
           <p>A simple GET request returns a JSON object containing a random 'S' and its description.</p>
@@ -152,6 +152,19 @@ function About() {
             </Card.Body>
           </Card>
         </Col>
+      </Row>
+      <Row className='mt-5 text-center'>
+        <OverlayTrigger
+            delay={{ show: 138, hide: 400 }}
+            overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
+          >
+            <Link to="/">
+              <Image 
+                src={CoolS} 
+                alt="S" 
+              />
+            </Link>
+          </OverlayTrigger>
       </Row>
       <Copyright/>
     </Container>

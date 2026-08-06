@@ -28,7 +28,7 @@ function App() {
               <Nav.Link href="/">Home</Nav.Link>
             </Nav.Item>
             <Nav.Item className='mx-3'>
-              <Nav.Link href="/about">API</Nav.Link>
+              <Nav.Link href="/about">About</Nav.Link>
             </Nav.Item>
             <Nav.Item className='mx-3'>
               <Nav.Link href="/contact">Contact</Nav.Link>

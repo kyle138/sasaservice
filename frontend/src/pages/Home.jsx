@@ -10,6 +10,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Jumbo from '../utils/Jumbo';
+import Copyright from '../utils/Copyright';
 
 
 function Home() {
@@ -151,18 +153,7 @@ function Home() {
 
   return (
     <Container className='vt323-regular crt mb-5'>
-      <Row className='pt-4 pb-2'>
-        <OverlayTrigger
-          delay={{ show: 138, hide: 400 }}
-          overlay={<Tooltip id="LogoTip">'S' as a Service, redefining Saas!</Tooltip>}
-        >
-          <Image
-            id="logo"
-            src={Logo}
-            alt="'S' as a Service, redefining Saas!"
-          />
-        </OverlayTrigger>
-      </Row>
+      <Jumbo />
       <Row className='py-2 ps-5 text-center'>
         <Col xs={4} md={6}>
           <OverlayTrigger
@@ -206,11 +197,7 @@ function Home() {
         </Col>
       </Row>
       <Console />
-      <Row className='pt-4 pb-3 pe-5'>
-        <Col>
-          <p className='text-end'>© 2026</p>
-        </Col>
-      </Row>
+      <Copyright />
     </Container>
   ); // End return
 };  // End home

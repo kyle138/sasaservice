@@ -155,7 +155,7 @@ function About() {
       </Row>
       <Copyright/>
     </Container>
-  )
-};
+  ); // End return
+};  // End About
 
 export default About;

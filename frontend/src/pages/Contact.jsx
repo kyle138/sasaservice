@@ -20,7 +20,7 @@ function Contact() {
       </Row>
       <Copyright/>
     </Container>
-  )
-};
+  ); // End return
+};  // End Contact
 
 export default Contact;

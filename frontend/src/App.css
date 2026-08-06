@@ -28,8 +28,9 @@ body {
   --bs-navbar-toggler-border-color: #D7FFC7;
 }
 
-#navbar.border-bottom {
-  --bs-border-color: #A7C942;
+#navbar {
+  border-bottom: #A7C942;
+  background-color: #131313;
 }
 
 .navbar-brand {

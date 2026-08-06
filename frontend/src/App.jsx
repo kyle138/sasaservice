@@ -12,7 +12,7 @@ function NavBar() {
   const location = useLocation();
 
   return (
-      <Navbar id="navbar" expand="md" className="pb-0">
+      <Navbar id="navbar" expand="md" className="pb-0 border-bottom" sticky="top">
         <Navbar.Brand as={Link} to="/">
           <Image 
             src={Brand}

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
-import Logo from '../assets/SasaService_logo_tri_DS_sub_alpha.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
@@ -142,8 +141,8 @@ function Home() {
                   className="bg-dark vt323-green crt-input"
                   maxLength={1}
                   value={letter}
-                  onFocus={(event) => event.target.select()}
-                  onClick={(event) => event.target.select()}
+                  onFocus={(event) => event.currentTarget.select()}
+                  onClick={(event) => event.currentTarget.select()}
                   onChange={handleLetter}
                 />
               </Col>

@@ -47,6 +47,16 @@ function About() {
   return (
     <Container className='vt323-regular crt mb-5'>
       <Jumbo />
+      <Row className='py-5 px-5 mx-3'>
+        <Col sm={3}>
+          <h1 className='bitcount vt323-green fs-1'>About</h1>
+        </Col>
+        <Col sm={9}>
+          <p>
+            Welcome to <span className='vt323-glow'>'S' as a Service ('S'aaS)</span> which is the world’s premier, enterprise-grade cloud solution for mission-critical 'S' identification and verification. Built to scale across modern distributed architectures, our sub-millisecond RESTful API empowers <span className='vt323-glow'>S</span>oftware Engineers, <span className='vt323-glow'>S</span>ystems Architects, <span className='vt323-glow'>S</span>cholars, <span className='vt323-glow'>S</span>alami Makers, and <span className='vt323-glow'>S</span>ophists worldwide to fetch, validate, and disambiguate any letter 'S' variant across the Unicode spectrum. Stop guessing if that squigly character counts as an 'S' and let <span className='vt323-glow'>'S'aaS</span> handle the heavy lifting!
+          </p>
+        </Col>
+      </Row>
       <Row className='py-2 px-5 mx-3 api-row'>
         <Col sm={3}>
           <h1 className='bitcount vt323-green fs-1'>API</h1>

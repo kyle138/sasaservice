@@ -10,6 +10,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import { Card } from 'react-bootstrap';
 import Jumbo from '../utils/Jumbo';
 import Copyright from '../utils/Copyright';
 
@@ -70,6 +71,7 @@ function Home() {
 
   // Test if supplied letter is an 'S'
   function handleLetter(e) {
+    console.log(`handleLetter:e:: ${e.target.value}`); // DEBUG
     if (e.target.value.length != 1) {
       setLetter('');
       return;
@@ -94,11 +96,26 @@ function Home() {
       // Set the "is an | is not an | etc... based on verdict"
       const isAn = resp?.verdict 
                ? resp?.verdict == "¯\\_(ツ)_/¯" 
-                  ? `Is ${e.target.value} an 'S'?`
-                  : `${e.target.value} is an 'S'` 
-               : `The letter '${e.target.value}' is NOT an 'S'`;
+                  ? `Eh... ${e.target.value} is maybe an 'S'.`
+                  : `The letter ${e.target.value} is an 'S'!` 
+               : `The letter '${e.target.value}' is NOT an 'S'.`;
 
-      setResponse(<p>Verdict: {resp.verdict.toString()}<br/>{isAn}<br/>Description: {resp?.description}.</p>);
+      // Now set the response
+      setResponse(
+        <Card bg={'dark'} className='rounded-0 vt323-green'>
+          <Card.Header>
+            &gt;&nbsp;Response:
+          </Card.Header>
+          <Card.Body>
+            <pre className='mx-3 vt323-regular'>
+              Verdict: {resp.verdict.toString()}<br/>
+              Description: {resp?.description}<br/>
+              <br/>
+              {isAn}
+            </pre>
+          </Card.Body>
+        </Card>
+      );
     })
     .catch((err) => {
       console.error(`POST error: `,err);
@@ -116,21 +133,22 @@ function Home() {
             <Col>
               <h1 className='bitcount vt323-green fs-2'>Enter your own letter to check:</h1>
             </Col>
-          <Form.Group as={Row} id='letter-input-group'>
-            <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
-            <Col sm={3} className='invFormInput ps-0'>
-              <Form.Control
-                id="letter-input"
-                type="text"
-                maxLength={1}
-                value={letter}
-                onFocus={(event) => event.target.select()}
-                onChange={handleLetter}
+            <Form.Group as={Row} id='letter-input-group'>
+              <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
+              <Col sm={3} className='invFormInput ps-0'>
+                <Form.Control
+                  id="letter-input"
+                  type="text"
+                  className="bg-dark vt323-green"
+                  maxLength={1}
+                  value={letter}
+                  onFocus={(event) => event.target.select()}
+                  onChange={handleLetter}
                 />
-            </Col>
-          </Form.Group>
-                </Row>
-          <Row className="ps-5">
+              </Col>
+            </Form.Group>
+          </Row>
+          <Row className="px-5 mt-5">
             <Col>{response}</Col>
           </Row>
         </>

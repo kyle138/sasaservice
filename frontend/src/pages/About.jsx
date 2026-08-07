@@ -53,7 +53,7 @@ function About() {
         </Col>
         <Col sm={9}>
           <p>
-            Welcome to <span className='vt323-glow'>'S' as a Service ('S'aaS)</span> which is the world’s premier, enterprise-grade cloud solution for mission-critical 'S' identification and verification. Built to scale across modern distributed architectures, our sub-millisecond RESTful API empowers <span className='vt323-glow'>S</span>oftware Engineers, <span className='vt323-glow'>S</span>ystems Architects, <span className='vt323-glow'>S</span>cholars, <span className='vt323-glow'>S</span>alami Makers, and <span className='vt323-glow'>S</span>ophists worldwide to fetch, validate, and disambiguate any letter 'S' variant across the Unicode spectrum. Stop guessing if that squigly character counts as an 'S' and let <span className='vt323-glow'>'S'aaS</span> handle the heavy lifting!
+            Welcome to <span className='vt323-glow vt323-bold'>'S' as a Service ('S'aaS)</span> which is the world’s premier, enterprise-grade cloud solution for mission-critical 'S' identification and verification. Built to scale across modern distributed architectures, our sub-millisecond RESTful API empowers <span className='vt323-glow'>S</span>oftware Engineers, <span className='vt323-glow'>S</span>ystems Architects, <span className='vt323-glow'>S</span>cholars, <span className='vt323-glow'>S</span>alami Makers, and <span className='vt323-glow'>S</span>ophists worldwide to fetch, validate, and disambiguate any letter 'S' variant across the Unicode spectrum. Stop guessing if that squigly character counts as an 'S' and let <span className='vt323-glow vt323-bold'>'S'aaS</span> handle the heavy lifting!
           </p>
         </Col>
       </Row>
@@ -62,7 +62,7 @@ function About() {
           <h1 className='bitcount vt323-green fs-1'>API</h1>
         </Col>
         <Col sm={9}>
-          <p>'S' as a Service is powered by a world-class RESTful API designed to deliver high-performance 'S' validation securely and effeciently over the World Wide Web! It accepts both GET and POST request methods for all of your 'S' validation needs.</p>
+          <p><span className='vt323-glow vt323-bold'>'S' as a Service</span> is powered by a world-class RESTful API designed to deliver high-performance 'S' validation securely and effeciently over the World Wide Web! It accepts both GET and POST request methods for all of your 'S' validation needs.</p>
         </Col>
       </Row>
       <Row className='py-2 px-5 mx-3 api-row'>
@@ -146,7 +146,7 @@ function About() {
           <h2 className='bitcount vt323-green'>Ambiguous Characters</h2>
         </Col>
         <Col sm={9}>
-          <p>Not all 'S's are easily determined and fall in a grey zone. The 'S' as a Service API easily handles these ambiguous cases!</p>
+          <p>Not all 'S's are easily determined and some may fall in a grey zone. The <span className='vt323-glow vt323-bold'>'S' as a Service</span> API easily handles these ambiguous cases!</p>
           <Card bg={'dark'} className='rounded-0 vt323-green'>
             <Card.Header>
               &gt;&nbsp;POST /v1/ HTTP/1.1<br/>

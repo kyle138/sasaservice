@@ -106,6 +106,9 @@ body {
 
 .vt323-glow {
   text-shadow: 0 0 5px #306831, 0 0 10px #A7C942;
+}
+
+.vt323-bold {
   -webkit-text-stroke: 0.5px #306831;
   font-size: x-large;
 }

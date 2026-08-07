@@ -11,6 +11,20 @@ import Jumbo from '../utils/Jumbo';
 import Copyright from '../utils/Copyright';
 
 function Contact() {
+  const envelope = `
+  +---------------------------------+
+  | \                             / |
+  |  \                           /  |
+  |   \                         /   |
+  |    \                       /    |
+  |     \                     /     |
+  |    / \                   / \    |
+  |   /   \_________________/   \   |
+  |  /                           \  |
+  | /                             \ |
+  +---------------------------------+
+  `;
+
   return (
     <Container className='vt323-regular crt mb-5'>
       <Jumbo />

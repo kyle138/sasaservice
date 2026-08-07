@@ -6,7 +6,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import './App.css';
+import NotFound404 from './pages/NotFound404';
+import './App.css'
 
 function NavBar() {
   const location = useLocation();
@@ -48,7 +49,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-      </Routes>
+        <Route path="*" element={<NotFound404 />} />
+    </Routes>
     </BrowserRouter>
   );
 }

@@ -173,3 +173,29 @@ body {
 .api-code {
   background-color: #303831;
 }
+
+.drops {
+  color: #97c50d;
+  display: inline-block;
+  animation: drop 1.4s linear forwards;
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(200%);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translateY(500%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(750%);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0.0;
+  }
+}
+

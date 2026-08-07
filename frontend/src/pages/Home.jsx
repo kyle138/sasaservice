@@ -139,10 +139,11 @@ function Home() {
                 <Form.Control
                   id="letter-input"
                   type="text"
-                  className="bg-dark vt323-green"
+                  className="bg-dark vt323-green crt-input"
                   maxLength={1}
                   value={letter}
                   onFocus={(event) => event.target.select()}
+                  onClick={(event) => event.target.select()}
                   onChange={handleLetter}
                 />
               </Col>

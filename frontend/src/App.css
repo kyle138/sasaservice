@@ -123,6 +123,16 @@ body {
   min-height: 60vh;
 }
 
+.crt-input.form-control:focus {
+  color: #A7C942;
+
+}
+
+.crt-input::selection {
+  color: #0d1117;
+  background-color: #A7C942;
+}
+
 .bitcount {
   font-family: 'Bitcount Grid Double Variable', monospace;
   font-weight: 400;

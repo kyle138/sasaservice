@@ -104,6 +104,10 @@ body {
   color: #A7C942;
 }
 
+.darkgreen {
+  color: #306831;
+}
+
 .vt323-glow {
   text-shadow: 0 0 5px #306831, 0 0 10px #A7C942;
 }
@@ -159,6 +163,24 @@ body {
 }
 
 .rad.disabled h2 {
+  color: #131313;
+}
+
+.formSubmit {
+  background-color: #306831;
+  border-color: #A7C942;
+  color: #131313;
+}
+
+.formSubmit:disabled {
+  background-color: #131313;
+  border-color: #306831;
+  color: #306831;
+}
+
+.formSubmit:hover {
+  background-color: #A7C942;
+  border-color: #A7C942;
   color: #131313;
 }
 

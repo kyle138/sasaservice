@@ -14,7 +14,7 @@ import Jumbo from '../utils/Jumbo';
 import Copyright from '../utils/Copyright';
 
 function Contact() {
-  const [required, setRequired] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [evapsToggle, setEvapsToggle] = useState(false);
 
   // Build the div containing the array of envelope ascii art
@@ -88,16 +88,51 @@ function Contact() {
   // Handle change in Message field
   function handleMessage(e) {
     console.debug(`handleMessage:e:: ${e.target.value}`); // DEBUG
-    setRequired(e.target.value.length > 0);
+    setSubmit(e.target.value.length > 0);
   }
 
   // Handle form submission
   function handleSubmit(e) {
     e.preventDefault();
-    console.debug(`handleSubmit:e:: ${e.target.value}`); // DEBUG
-    evapEnvelope();
-    // alert("Thank you for your message! We will get back to you shortly.");
-  }
+    setSubmit(false);
+    console.debug(`handleSubmit:e:: `,e.currentTarget.elements); // DEBUG
+    console.debug(`formYourName: `,e.currentTarget.elements.formYourName); // DEBUG
+
+    if(e.currentTarget.elements.formMessage?.value && e.currentTarget.elements.formMessage.value.length > 0) {
+      var formData = {
+        site: "sasaservice",
+        name: e.currentTarget.elements.formYourName.value,
+        email: e.currentTarget.elements.formEmail.value,
+        subject: e.currentTarget.elements.formSubject.value,
+        score: e.currentTarget.elements.formScore.value,
+        message: e.currentTarget.elements.formMessage.value
+      };
+
+      evapEnvelope();
+
+      fetch('https://sasaservice.com/v1/feedback/', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
+        const resp = JSON.parse(data.response);
+        console.debug(`Post response: ${JSON.stringify(resp,null,2)}`); // DEBUG
+
+        // SET RESPONSE HERE
+      })
+      .catch((err) => {
+        console.error(`POST error: `,err);
+        // SET RESPONSE HERE
+      }); // End fetch
+
+    } // End if message
+
+  } // End handleSubmit
 
   return (
     <Container className='vt323-regular crt mb-5'>
@@ -107,8 +142,8 @@ function Contact() {
           <p>We would love to hear from you! Please use the Feedback form below to send a message.</p>
         </Col>
       </Row>
-      <Form className='p-5'>
-        <Form.Group className='mb-3' controlId='formYourname'>
+      <Form className='p-5' onSubmit={handleSubmit}>
+        <Form.Group className='mb-3' controlId='formYourName'>
           <Form.Label>Your Name</Form.Label>
           <Form.Control type="text" />
         </Form.Group>
@@ -146,7 +181,7 @@ function Contact() {
           placement="top"
           overlay={
             <Tooltip id="submit-button-tooltip">
-              { !required 
+              { !submit 
                 ? "The message field is required." 
                 : "Send your message."
               }
@@ -157,8 +192,7 @@ function Contact() {
             <Button 
               type="submit" 
               className='formSubmit' 
-              disabled={!required}
-              onClick={handleSubmit}
+              disabled={!submit}
             >Send</Button>
           </span>
         </OverlayTrigger>

@@ -72,6 +72,39 @@ Resources:
             Path: /v1
             Method: post
             RestApiId: !Ref SaasApi
+  FeedbackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers/feedback.handler
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Policies: 
+        - Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:DescribeTable
+                  - dynamodb:ConditionCheckItem
+                Resource:
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/sam-feedbackform-Feedbacks"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/sam-feedbackform-Feedbacks/index/*"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/errorLogs"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/errorLogs/index/*"
+      Events:
+        FeedbackPost:
+          Type: Api
+          Properties:
+            Path: /v1/feedback
+            Method: post
+            RestApiId: !Ref SaasApi
+      Environment:
+        Variables:
+          FEEDBACKS_TABLE_NAME: "sam-feedbackform-Feedbacks"
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
-import { Form, FormGroup, FormLabel, FormControl, FormText } from 'react-bootstrap';
+import { Form, FormGroup, FormLabel, FormControl, FormText, Alert } from 'react-bootstrap';
 import { Button }from 'react-bootstrap';
 import { Collapse } from 'react-bootstrap';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -16,6 +16,16 @@ import Copyright from '../utils/Copyright';
 function Contact() {
   const [submit, setSubmit] = useState(false);
   const [evapsToggle, setEvapsToggle] = useState(false);
+  const [response, setResponse] = useState(0);
+
+  const initialValues = {
+    formYourName: '',
+    formEmail: '',
+    formSubject: '',
+    formScore: '',
+    formMessage: ''
+  };
+  const [formData, setFormData] = useState(initialValues);
 
   // Build the div containing the array of envelope ascii art
   function divEnvelope() {
@@ -49,22 +59,40 @@ function Contact() {
   function divCoolS() {
     return (
       <OverlayTrigger
-            delay={{ show: 138, hide: 400 }}
-            overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
-          >
-            <Link to="/">
-              <Image 
-                src={CoolS} 
-                alt="S" 
-              />
-            </Link>
-          </OverlayTrigger>
+        delay={{ show: 138, hide: 400 }}
+        overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
+      >
+        <Link to="/">
+          <Image 
+            src={CoolS} 
+            alt="S" 
+          />
+        </Link>
+      </OverlayTrigger>
     ); // End return
   }; // End divCoolS
 
+  function Response() {
+    return (
+      <Row className='py-2 px-5 text-center'>
+        <Col>
+          {
+            response === 1
+            ? <Alert variant='success'>Thank you for your message!</Alert>
+            : response === 2
+              ? <Alert className='vt323-red ' variant='danger'>There was an error sending your message. Please try again later.</Alert>
+              : response === 3
+                ? <p>Hailing frequencies open...</p>
+                : null
+          }
+        </Col>
+      </Row>
+    ); // End return
+  }
+
   function Panel() {
     return (
-      <Row className='py-2 ps-5 text-center'>
+      <Row className='py-2 px-5 text-center'>
         <Col>
           { evapsToggle ? divCoolS() : divEnvelope() }
         </Col>
@@ -87,7 +115,8 @@ function Contact() {
 
   // Handle change in Message field
   function handleMessage(e) {
-    console.debug(`handleMessage:e:: ${e.target.value}`); // DEBUG
+    // console.debug(`handleMessage:e:: ${e.target.value}`); // DEBUG
+    setFormData({...formData, formMessage: e.target.value});
     setSubmit(e.target.value.length > 0);
   }
 
@@ -95,8 +124,6 @@ function Contact() {
   function handleSubmit(e) {
     e.preventDefault();
     setSubmit(false);
-    console.debug(`handleSubmit:e:: `,e.currentTarget.elements); // DEBUG
-    console.debug(`formYourName: `,e.currentTarget.elements.formYourName); // DEBUG
 
     if(e.currentTarget.elements.formMessage?.value && e.currentTarget.elements.formMessage.value.length > 0) {
       var formData = {
@@ -109,6 +136,7 @@ function Contact() {
       };
 
       evapEnvelope();
+      setResponse(3);
 
       fetch('https://sasaservice.com/v1/feedback/', {
         method: "POST",
@@ -119,19 +147,18 @@ function Contact() {
       })
       .then((resp) => resp.json())
       .then((data) => {
-        console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
-        const resp = JSON.parse(data.response);
-        console.debug(`Post response: ${JSON.stringify(resp,null,2)}`); // DEBUG
+        // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
+        const resp = data.response;
 
-        // SET RESPONSE HERE
+        setResponse(1);
+        setFormData(initialValues);
       })
       .catch((err) => {
-        console.error(`POST error: `,err);
-        // SET RESPONSE HERE
+        // console.error(`POST error: `,err);
+        setResponse(2);
       }); // End fetch
 
     } // End if message
-
   } // End handleSubmit
 
   return (
@@ -145,12 +172,18 @@ function Contact() {
       <Form className='p-5' onSubmit={handleSubmit}>
         <Form.Group className='mb-3' controlId='formYourName'>
           <Form.Label>Your Name</Form.Label>
-          <Form.Control type="text" />
+          <Form.Control type="text" 
+            value={formData.formYourName}
+            onChange={(e) => setFormData({...formData, formYourName: e.target.value})}
+          />
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formEmail'>
           <Form.Label>Email Address</Form.Label>
-          <Form.Control type="email" />
+          <Form.Control type="email" 
+            value={formData.formEmail}
+            onChange={(e) => setFormData({...formData, formEmail: e.target.value})}
+          />
           <Form.Text className='vt323-green fs-6'>
             (We will never share your email.)
           </Form.Text>
@@ -158,13 +191,19 @@ function Contact() {
 
         <Form.Group className='mb-3' controlId='formSubject'>
           <Form.Label>Subject</Form.Label>
-          <Form.Control type="text" />
+          <Form.Control type="text" 
+            value={formData.formSubject}
+            onChange={(e) => setFormData({...formData, formSubject: e.target.value})}
+          />
         </Form.Group>
 
         <Collapse>
           <Form.Group className='mb-3' controlId='formScore' >
             <Form.Label>Score</Form.Label>
-            <Form.Control type="text" />
+            <Form.Control type="text" 
+              value={formData.formScore}
+              onChange={(e) => setFormData({...formData, formScore: e.target.value})}
+            />
           </Form.Group>
         </Collapse>
 
@@ -173,6 +212,7 @@ function Contact() {
           <Form.Control 
             as="textarea" 
             rows={5} 
+            value={formData.formMessage}
             onChange={handleMessage}
           />
         </Form.Group>
@@ -198,6 +238,7 @@ function Contact() {
         </OverlayTrigger>
       </Form>
       <Panel />
+      <Response />
       <Copyright/>
     </Container>
   ); // End return

@@ -165,16 +165,16 @@ function About() {
       </Row>
       <Row className='mt-5 text-center'>
         <OverlayTrigger
-            delay={{ show: 138, hide: 400 }}
-            overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
-          >
-            <Link to="/">
-              <Image 
-                src={CoolS} 
-                alt="S" 
-              />
-            </Link>
-          </OverlayTrigger>
+          delay={{ show: 138, hide: 400 }}
+          overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
+        >
+          <Link to="/">
+            <Image 
+              src={CoolS} 
+              alt="S" 
+            />
+          </Link>
+        </OverlayTrigger>
       </Row>
       <Copyright/>
     </Container>

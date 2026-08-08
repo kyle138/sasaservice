@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
-import Logo from '../assets/SasaService_logo_tri_DS_sub_alpha.svg';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { Link } from 'react-router-dom';
+import Image from 'react-bootstrap/Image';
 import { Form, FormGroup, FormLabel, FormControl, FormText } from 'react-bootstrap';
 import { Button }from 'react-bootstrap';
-import Image from 'react-bootstrap/Image';
+import { Collapse } from 'react-bootstrap';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Jumbo from '../utils/Jumbo';
@@ -19,17 +20,17 @@ function Contact() {
   // Build the div containing the array of envelope ascii art
   function divEnvelope() {
     const envelope = `
-+---------------------------------+
-| ⧵                             / |
-|  ⧵                           /  |
-|   ⧵                         /   |
-|    ⧵       CONTACT US      /    |
-|     ⧵                     /     |
-|    / ⧵                   / ⧵    |
-|   /   ⧵_________________/   ⧵   |
-|  /                           ⧵  |
-| /                             ⧵ |
-+---------------------------------+
++-----------------------------+
+| ⧵                         / |
+|  ⧵                       /  |
+|   ⧵                     /   |
+|    ⧵     CONTACT US    /    |
+|     ⧵                 /     |
+|    / ⧵               / ⧵    |
+|   /   ⧵_____________/   ⧵   |
+|  /                       ⧵  |
+| /                         ⧵ |
++-----------------------------+
 `;
 
     const arrayEnvelope = Array.from(envelope).map((char, idx) => {
@@ -45,6 +46,32 @@ function Contact() {
     );
   } // End DivEnvelope
 
+  function divCoolS() {
+    return (
+      <OverlayTrigger
+            delay={{ show: 138, hide: 400 }}
+            overlay={<Tooltip id="CoolSTip">Click for a new random 'S'</Tooltip>}
+          >
+            <Link to="/">
+              <Image 
+                src={CoolS} 
+                alt="S" 
+              />
+            </Link>
+          </OverlayTrigger>
+    ); // End return
+  }; // End divCoolS
+
+  function Panel() {
+    return (
+      <Row className='py-2 ps-5 text-center'>
+        <Col>
+          { evapsToggle ? divCoolS() : divEnvelope() }
+        </Col>
+      </Row>
+    ); // End return
+  }; // End Panel
+
   function evapEnvelope() { 
     const interval = setInterval(() => {
       const asciiSpans = document.querySelectorAll("div.envelope > span:not(.evaps)");
@@ -55,7 +82,7 @@ function Contact() {
         clearInterval(interval);
         setEvapsToggle(!evapsToggle);
       }
-    }, 7);
+    }, 1);
   };  // end evapEnvelope
 
   // Handle change in Message field
@@ -75,32 +102,39 @@ function Contact() {
   return (
     <Container className='vt323-regular crt mb-5'>
       <Jumbo />
+      <Row className='px-5 pt-5'>
+        <Col>
+          <p>We would love to hear from you! Please use the Feedback form below to send a message.</p>
+        </Col>
+      </Row>
       <Form className='p-5'>
         <Form.Group className='mb-3' controlId='formYourname'>
-          <Form.Label htmlFor="yourname">Your Name</Form.Label>
-          <Form.Control type="text" id="yourname" />
+          <Form.Label>Your Name</Form.Label>
+          <Form.Control type="text" />
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formEmail'>
-          <Form.Label htmlFor='email'>Email Address</Form.Label>
-          <Form.Control type="email" id='email'/>
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control type="email" />
           <Form.Text className='vt323-green fs-6'>
             (We will never share your email.)
           </Form.Text>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formSubject'>
-          <Form.Label htmlFor='subject'>Subject</Form.Label>
-          <Form.Control type="text" id='subject'/>
+          <Form.Label>Subject</Form.Label>
+          <Form.Control type="text" />
         </Form.Group>
 
-        <Form.Group className='mb-3' controlId='formScore'>
-          <Form.Label htmlFor='score'>Score</Form.Label>
-          <Form.Control type="text" id='score'/>
-        </Form.Group>
+        <Collapse>
+          <Form.Group className='mb-3' controlId='formScore' >
+            <Form.Label>Score</Form.Label>
+            <Form.Control type="text" />
+          </Form.Group>
+        </Collapse>
 
-        <Form.Group className='mb-3' controlId='message'>
-          <Form.Label htmlFor='message'>Your Message (required)</Form.Label>
+        <Form.Group className='mb-3' controlId='formMessage'>
+          <Form.Label>Your Message (required)</Form.Label>
           <Form.Control 
             as="textarea" 
             rows={5} 
@@ -129,11 +163,7 @@ function Contact() {
           </span>
         </OverlayTrigger>
       </Form>
-      <Row className='py-2 ps-5 text-center'>
-        <Col>
-          {divEnvelope()}
-        </Col>
-      </Row>
+      <Panel />
       <Copyright/>
     </Container>
   ); // End return

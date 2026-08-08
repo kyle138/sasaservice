@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
 import Logo from '../assets/SasaService_logo_tri_DS_sub_alpha.svg';
@@ -13,21 +13,50 @@ import Jumbo from '../utils/Jumbo';
 import Copyright from '../utils/Copyright';
 
 function Contact() {
-  const envelope = `
-  +---------------------------------+
-  | \                             / |
-  |  \                           /  |
-  |   \                         /   |
-  |    \                       /    |
-  |     \                     /     |
-  |    / \                   / \    |
-  |   /   \_________________/   \   |
-  |  /                           \  |
-  | /                             \ |
-  +---------------------------------+
-  `;
-
   const [required, setRequired] = useState(false);
+  const [evapsToggle, setEvapsToggle] = useState(false);
+
+  // Build the div containing the array of envelope ascii art
+  function divEnvelope() {
+    const envelope = `
++---------------------------------+
+| ⧵                             / |
+|  ⧵                           /  |
+|   ⧵                         /   |
+|    ⧵       CONTACT US      /    |
+|     ⧵                     /     |
+|    / ⧵                   / ⧵    |
+|   /   ⧵_________________/   ⧵   |
+|  /                           ⧵  |
+| /                             ⧵ |
++---------------------------------+
+`;
+
+    const arrayEnvelope = Array.from(envelope).map((char, idx) => {
+      return (char === '+' || char === '-' || char === '|' || char === '/' || char === '⧵' || char === '_' || char === 'C' || char === 'O' || char === 'N' || char === 'T' || char === 'A' || char === 'U' || char === 'S'  ) 
+        ? <span key={idx.toString()}>{char}</span> 
+        : char;
+    });
+
+    return (
+      <div className='ascii envelope' id='divEnvelope'>
+        {arrayEnvelope}
+      </div>
+    );
+  } // End DivEnvelope
+
+  function evapEnvelope() { 
+    const interval = setInterval(() => {
+      const asciiSpans = document.querySelectorAll("div.envelope > span:not(.evaps)");
+      if(asciiSpans.length > 0) {
+        const evap = asciiSpans[Math.floor(Math.random() * asciiSpans.length)];
+        evap.classList.add("evaps");
+      } else {
+        clearInterval(interval);
+        setEvapsToggle(!evapsToggle);
+      }
+    }, 7);
+  };  // end evapEnvelope
 
   // Handle change in Message field
   function handleMessage(e) {
@@ -35,13 +64,17 @@ function Contact() {
     setRequired(e.target.value.length > 0);
   }
 
+  // Handle form submission
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.debug(`handleSubmit:e:: ${e.target.value}`); // DEBUG
+    evapEnvelope();
+    // alert("Thank you for your message! We will get back to you shortly.");
+  }
+
   return (
     <Container className='vt323-regular crt mb-5'>
       <Jumbo />
-      <Row className='py-2 ps-5 text-center'>
-        <h1>Contact</h1>
-        <p>Make look pretty later...</p>
-      </Row>
       <Form className='p-5'>
         <Form.Group className='mb-3' controlId='formYourname'>
           <Form.Label htmlFor="yourname">Your Name</Form.Label>
@@ -75,12 +108,32 @@ function Contact() {
           />
         </Form.Group>
 
-        <Button 
-          type="submit" 
-          className='formSubmit' 
-          disabled={!required}
-        >Send</Button>
+        <OverlayTrigger
+          placement="top"
+          overlay={
+            <Tooltip id="submit-button-tooltip">
+              { !required 
+                ? "The message field is required." 
+                : "Send your message."
+              }
+            </Tooltip>
+          }
+        > 
+          <span className="d-inline-block">
+            <Button 
+              type="submit" 
+              className='formSubmit' 
+              disabled={!required}
+              onClick={handleSubmit}
+            >Send</Button>
+          </span>
+        </OverlayTrigger>
       </Form>
+      <Row className='py-2 ps-5 text-center'>
+        <Col>
+          {divEnvelope()}
+        </Col>
+      </Row>
       <Copyright/>
     </Container>
   ); // End return

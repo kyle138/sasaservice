@@ -117,6 +117,13 @@ body {
   font-size: x-large;
 }
 
+.envelope {
+  font-family: 'Courier New', monospace;
+  font-size: large;
+  color: #A7C942;
+  text-align: center;
+}
+
 .crt {
   text-align: left;
   font-size: x-large;
@@ -231,3 +238,27 @@ body {
   }
 }
 
+.evaps {
+  color: #97c50d;
+  display: inline-block;
+  animation: evap 0.4s linear forwards;
+}
+
+@keyframes evap {
+  0% {
+    transform: translateY(-200%);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translateY(-500%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-1000%);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-1500%);
+    opacity: 0.0;
+  }
+}

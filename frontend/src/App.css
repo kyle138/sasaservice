@@ -136,7 +136,7 @@ body {
 
 .crt-input.form-control:focus {
   color: #A7C942;
-
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66, 0.5);
 }
 
 .crt-input::selection {
@@ -173,12 +173,22 @@ body {
   color: #131313;
 }
 
+.fb-input {
+  color: #131313;
+}
+
+.fb-input:focus {
+  color: #131313;
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66, 0.5);
+}
+
 .formSubmit {
   background-color: #306831;
   border-color: #A7C942;
   color: #131313;
 }
 
+fieldset:disabled .btn,
 .formSubmit:disabled {
   background-color: #131313;
   border-color: #306831;
@@ -189,6 +199,23 @@ body {
   background-color: #A7C942;
   border-color: #A7C942;
   color: #131313;
+}
+
+.formSubmit:focus,
+.formSubmit:focus-visible {
+  background-color: #306831;
+  border-color: #A7C942;
+  color: #131313;
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66, 0.5);
+  outline: none;
+}
+
+.formSubmit:active,
+.formSubmit:active:focus {
+  background-color: #A7C942;
+  border-color: #A7C942;
+  color: #131313;
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66, 0.5);
 }
 
 .cursor {

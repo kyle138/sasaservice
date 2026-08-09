@@ -126,13 +126,13 @@ function Contact() {
     setSubmit(false);
 
     if(e.currentTarget.elements.formMessage?.value && e.currentTarget.elements.formMessage.value.length > 0) {
-      var formData = {
+      var postData = {
         site: "sasaservice",
-        name: e.currentTarget.elements.formYourName.value,
-        email: e.currentTarget.elements.formEmail.value,
-        subject: e.currentTarget.elements.formSubject.value,
-        score: e.currentTarget.elements.formScore.value,
-        message: e.currentTarget.elements.formMessage.value
+        name: formData.formYourName,
+        email: formData.formEmail,
+        subject: formData.formSubject,
+        score: formData.formScore,
+        message: formData.formMessage
       };
 
       evapEnvelope();
@@ -143,18 +143,24 @@ function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(postData)
       })
-      .then((resp) => resp.json())
+      .then(async (resp) => {
+        if(!resp.ok) {
+          const errData = await resp.json().catch(() => ({}));
+          throw new Error(errData.message || `Request failed with status ${resp.status}`);
+        }
+        return resp.json();
+      })
       .then((data) => {
-        // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
+        console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
         const resp = data.response;
 
         setResponse(1);
         setFormData(initialValues);
       })
       .catch((err) => {
-        // console.error(`POST error: `,err);
+        console.error(`POST error: `,err);
         setResponse(2);
       }); // End fetch
 
@@ -170,72 +176,86 @@ function Contact() {
         </Col>
       </Row>
       <Form className='p-5' onSubmit={handleSubmit}>
-        <Form.Group className='mb-3' controlId='formYourName'>
-          <Form.Label>Your Name</Form.Label>
-          <Form.Control type="text" 
-            value={formData.formYourName}
-            onChange={(e) => setFormData({...formData, formYourName: e.target.value})}
-          />
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='formEmail'>
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control type="email" 
-            value={formData.formEmail}
-            onChange={(e) => setFormData({...formData, formEmail: e.target.value})}
-          />
-          <Form.Text className='vt323-green fs-6'>
-            (We will never share your email.)
-          </Form.Text>
-        </Form.Group>
-
-        <Form.Group className='mb-3' controlId='formSubject'>
-          <Form.Label>Subject</Form.Label>
-          <Form.Control type="text" 
-            value={formData.formSubject}
-            onChange={(e) => setFormData({...formData, formSubject: e.target.value})}
-          />
-        </Form.Group>
-
-        <Collapse>
-          <Form.Group className='mb-3' controlId='formScore' >
-            <Form.Label>Score</Form.Label>
-            <Form.Control type="text" 
-              value={formData.formScore}
-              onChange={(e) => setFormData({...formData, formScore: e.target.value})}
-            />
+        <fieldset disabled={response > 0}>
+          <Form.Group className='mb-3' controlId='formYourName'>
+            <Form.Label>Your Name</Form.Label>
+            <Form.Control 
+              type="text" 
+              className='fb-input'
+              value={formData.formYourName}
+              onChange={(e) => setFormData({...formData, formYourName: e.target.value})}
+              />
           </Form.Group>
-        </Collapse>
 
-        <Form.Group className='mb-3' controlId='formMessage'>
-          <Form.Label>Your Message (required)</Form.Label>
-          <Form.Control 
-            as="textarea" 
-            rows={5} 
-            value={formData.formMessage}
-            onChange={handleMessage}
-          />
-        </Form.Group>
+          <Form.Group className='mb-3' controlId='formEmail'>
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control 
+              type="email" 
+              className='fb-input'
+              value={formData.formEmail}
+              onChange={(e) => setFormData({...formData, formEmail: e.target.value})}
+              />
+            <Form.Text className='vt323-green fs-6'>
+              (We will never share your email.)
+            </Form.Text>
+          </Form.Group>
 
-        <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip id="submit-button-tooltip">
-              { !submit 
-                ? "The message field is required." 
-                : "Send your message."
-              }
-            </Tooltip>
-          }
-        > 
-          <span className="d-inline-block">
-            <Button 
-              type="submit" 
-              className='formSubmit' 
-              disabled={!submit}
-            >Send</Button>
-          </span>
-        </OverlayTrigger>
+          <Form.Group className='mb-3' controlId='formSubject'>
+            <Form.Label>Subject</Form.Label>
+            <Form.Control 
+              type="text" 
+              className='fb-input'
+              value={formData.formSubject}
+              onChange={(e) => setFormData({...formData, formSubject: e.target.value})}
+              />
+          </Form.Group>
+
+          <Collapse>
+            <Form.Group className='mb-3' controlId='formScore' >
+              <Form.Label>Score</Form.Label>
+              <Form.Control 
+                type="text" 
+                className='fb-input'
+                value={formData.formScore}
+                onChange={(e) => setFormData({...formData, formScore: e.target.value})}
+                />
+            </Form.Group>
+          </Collapse>
+
+          <Form.Group className='mb-3' controlId='formMessage'>
+            <Form.Label>Your Message (required)</Form.Label>
+            <Form.Control 
+              as="textarea" 
+              rows={5} 
+              className='fb-input'
+              value={formData.formMessage}
+              onChange={handleMessage}
+              />
+          </Form.Group>
+
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip id="submit-button-tooltip">
+                { 
+                  response === 0
+                  ? !submit 
+                    ? "The message field is required." 
+                    : "Send your message."
+                  : "Your message has already been sent."
+                }
+              </Tooltip>
+            }
+            > 
+            <span className="d-inline-block">
+              <Button 
+                type="submit" 
+                className='formSubmit' 
+                disabled={!submit}
+                >Send</Button>
+            </span>
+          </OverlayTrigger>
+        </fieldset>
       </Form>
       <Panel />
       <Response />

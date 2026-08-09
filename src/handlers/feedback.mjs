@@ -38,7 +38,10 @@ function validateRequiredVar(reqvar) {
 function robotrap(vrbl) {
   // Does the vrbl have a value?
   console.debug(`robotrap:vrbl:: ${vrbl}`); // DEBUG
-  if (typeof vrbl === 'string' && vrbl.trim().length > 0) {
+  if (vrbl == null) return;
+
+  // Check if vrbl has length
+  if (String(vrbl).trim().length > 0) {
     console.log(`Game: Checkers, Number of Players: 0`); // Bad robot!
     throw new Error('Insuffient empathetic response');
   }

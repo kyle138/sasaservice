@@ -106,7 +106,7 @@ function Home() {
             &gt;&nbsp;Response:
           </Card.Header>
           <Card.Body>
-            <pre className='mx-3 vt323-regular'>
+            <pre className='mx-1 mx-sm-3 vt323-regular responseCard'>
               Verdict: {resp.verdict.toString()}<br/>
               Description: {resp?.description}<br/>
               <br/>
@@ -133,12 +133,13 @@ function Home() {
               <h1 className='bitcount vt323-green fs-2'>Enter your own letter to check:</h1>
             </Col>
             <Form.Group as={Row} id='letter-input-group'>
-              <Form.Label column sm={3} className='text-start' htmlFor="letter-input">Letter to check: </Form.Label>
-              <Col sm={3} className='invFormInput ps-0'>
+              <Form.Label column sm={5} className='text-start fs-1' htmlFor="letter-input">Letter to check: </Form.Label>
+              <Col sm={2} className='invFormInput ps-0'>
                 <Form.Control
                   id="letter-input"
                   type="text"
-                  className="bg-dark vt323-green crt-input"
+                  size="lg"
+                  className="bg-dark vt323-green crt-input fs-1"
                   maxLength={1}
                   value={letter}
                   onFocus={(event) => event.currentTarget.select()}

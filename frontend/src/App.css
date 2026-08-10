@@ -240,6 +240,11 @@ fieldset:disabled .btn,
   background-color: #303831;
 }
 
+.responseCard {
+  white-space: pre-wrap; 
+  word-break: break-word; 
+}
+
 .drops {
   color: #97c50d;
   display: inline-block;

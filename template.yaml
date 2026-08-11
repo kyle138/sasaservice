@@ -26,9 +26,11 @@ Resources:
     Properties:
       StageName: prod
       # Ratelimits 
-      DefaultRouteSettings:
-        ThrottlingBurstLimit: 100  # Max concurrent
-        ThrottlingRateLimit: 50    # Sustained requests per second
+      MethodSettings:
+        - ResourcePath: '/*'        # Applies rate limits across all endpoints
+          HttpMethod: '*'           # Applies rate limits across all methods
+          ThrottlingBurstLimit: 100
+          ThrottlingRateLimit: 50
       Cors: 
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"

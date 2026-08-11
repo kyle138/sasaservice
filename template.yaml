@@ -25,6 +25,10 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
+      # Ratelimits 
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 100  # Max concurrent
+        ThrottlingRateLimit: 50    # Sustained requests per second
       Cors: 
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"

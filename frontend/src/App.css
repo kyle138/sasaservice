@@ -245,6 +245,46 @@ fieldset:disabled .btn,
   word-break: break-word; 
 }
 
+.consent { 
+  background-color: #302831;
+  color: #A7C942;
+}
+
+.consButton-outline {
+  background-color: #131313;
+  border-color: #306831;
+  color: #306831;
+}
+
+.consButton-solid {
+  background-color: #306831;
+  border-color: #A7C942;
+  color: #131313;
+}
+
+.consButton:hover {
+  background-color: #A7C942;
+  border-color: #A7C942;
+  color: #131313;
+}
+
+.consButton:focus,
+.consButton:focus-visible {
+  background-color: #306831;
+  border-color: #A7C942;
+  color: #131313;
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66 0.5);
+  outline: none;
+}
+
+.consButton:active,
+.consButton:active:focus {
+  background-color: #A7C942;
+  border-color: #A7C942;
+  color: #131313;
+  box-shadow: 0 0 0 0.25rem rgba(167, 201, 66 0.5);
+}
+
 .drops {
   color: #97c50d;
   display: inline-block;

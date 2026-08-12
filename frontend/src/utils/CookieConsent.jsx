@@ -53,7 +53,7 @@ export default function CookieConsent() {
             <div className="mb-3 mb-md-0 me-md-3">
               <strong className="d-block mb-1 bitcount">Obligatory Cookie Notice</strong>
               <small className="vt323-green vt323-regular">
-                By continuing to use this site you agree to the use of cookies to identify your session.
+                By continuing to use this site you agree to the use of cookies.
               </small>
             </div>
             <div className="d-flex gap-2 shrink-0">

@@ -18,7 +18,8 @@ export const handler = async (event, context) => {
 
   // Set CORS headers
   const corsHeaders = {
-    allowOrigin: event?.headers?.origin || '*',
+    // allowOrigin: event?.headers?.origin || '*',
+    allowOrigin: '*',
     allowMethods: 'OPTIONS,POST'
   };
 

@@ -138,7 +138,7 @@ function Contact() {
       evapEnvelope();
       setResponse(3);
 
-      fetch('https://sasaservice.com/v1/feedback/', {
+      fetch('https://sasaservice.com/api/feedback/', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

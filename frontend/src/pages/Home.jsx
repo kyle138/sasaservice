@@ -19,7 +19,7 @@ function Home() {
     const [response, setResponse] = useState(<p>Loading...</p>);
     const [letter, setLetter] = useState('');
 
-    const API = 'https://sasaservice.com/v1/';
+    const API = 'https://sasaservice.com/api/';
 
     const rads = [
       {value: 'int', label: "Interactive Mode"},

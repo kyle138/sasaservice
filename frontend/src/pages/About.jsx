@@ -76,7 +76,7 @@ function About() {
           <p>A simple GET request returns a JSON object containing a random 'S' and its description.</p>
           <Card bg={'dark'} className="rounded-0 vt323-green">
             <Card.Header>
-              &gt;&nbsp;GET /v1/ HTTP/1.1<br/>
+              &gt;&nbsp;GET /api/ HTTP/1.1<br/>
               &gt;&nbsp;Host: sasaservice.com
             </Card.Header>
             <Card.Body>
@@ -99,7 +99,7 @@ function About() {
           <p>If you already have your own 'S' or a character that you're not sure counts as an 'S' you can make a POST request to validate it. The 'S' as a Service API will return a verdict of true or false.</p>
           <Card bg={'dark'} className='rounded-0 vt323-green'>
             <Card.Header>
-              &gt;&nbsp;POST /v1/ HTTP/1.1<br/>
+              &gt;&nbsp;POST /api/ HTTP/1.1<br/>
               &gt;&nbsp;Host: sasaservice.com<br/>
               &gt;&nbsp;Content-Type: application/json<br/>
               &gt;&nbsp;Data: {JSON.stringify(post)}
@@ -124,7 +124,7 @@ function About() {
           <p>If you need more information about your character verbose mode will return a description of the provided 'S' along with a verdict of true or false.</p>
           <Card bg={'dark'} className='rounded-0 vt323-green'>
             <Card.Header>
-              &gt;&nbsp;POST /v1/ HTTP/1.1<br/>
+              &gt;&nbsp;POST /api/ HTTP/1.1<br/>
               &gt;&nbsp;Host: sasaservice.com<br/>
               &gt;&nbsp;Content-Type: application/json<br/>
               &gt;&nbsp;Data: {JSON.stringify(postVerbose)}
@@ -149,7 +149,7 @@ function About() {
           <p>Not all 'S's are easily determined and some may fall in a grey zone. The <span className='vt323-glow vt323-bold'>'S' as a Service</span> API easily handles these ambiguous cases!</p>
           <Card bg={'dark'} className='rounded-0 vt323-green'>
             <Card.Header>
-              &gt;&nbsp;POST /v1/ HTTP/1.1<br/>
+              &gt;&nbsp;POST /api/ HTTP/1.1<br/>
               &gt;&nbsp;Host: sasaservice.com<br/>
               &gt;&nbsp;Content-Type: application/json<br/>
               &gt;&nbsp;Data: {JSON.stringify(postAmbiguous)}

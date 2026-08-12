@@ -59,7 +59,7 @@ Resources:
         SaasGet:
           Type: Api
           Properties:
-            Path: /v1
+            Path: /api
             Method: get
             RestApiId: !Ref SaasApi
   PostFunction:
@@ -75,7 +75,7 @@ Resources:
         SaasPost:
           Type: Api
           Properties:
-            Path: /v1
+            Path: /api
             Method: post
             RestApiId: !Ref SaasApi
   FeedbackFunction:
@@ -105,7 +105,7 @@ Resources:
         FeedbackPost:
           Type: Api
           Properties:
-            Path: /v1/feedback
+            Path: /api/feedback
             Method: post
             RestApiId: !Ref SaasApi
       Environment:
@@ -178,7 +178,7 @@ Resources:
               Forward: none
         # Routing for API calls
         CacheBehaviors:
-          - PathPattern: /v1/*
+          - PathPattern: /api/*
             TargetOriginId: ApigOrigin
             ViewerProtocolPolicy: redirect-to-https
             AllowedMethods: 
@@ -224,4 +224,4 @@ Outputs:
     Value: !Sub "https://${DomainName}"
   BackendApiURL:
     Description: Unified APIG endpoint via CF
-    Value: !Sub "https://${DomainName}/v1"
+    Value: !Sub "https://${DomainName}/api"

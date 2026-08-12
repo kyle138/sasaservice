@@ -25,10 +25,17 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
+      # Ratelimits 
+      MethodSettings:
+        - ResourcePath: '/*'        # Applies rate limits across all endpoints
+          HttpMethod: '*'           # Applies rate limits across all methods
+          ThrottlingBurstLimit: 100
+          ThrottlingRateLimit: 50
       Cors: 
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-        AllowOrigin: !Sub "'https://${DomainName}'"
+        # AllowOrigin: !Sub "'https://${DomainName}'"
+        AllowOrigin: "'*'"
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -52,7 +59,7 @@ Resources:
         SaasGet:
           Type: Api
           Properties:
-            Path: /v1
+            Path: /api
             Method: get
             RestApiId: !Ref SaasApi
   PostFunction:
@@ -68,9 +75,42 @@ Resources:
         SaasPost:
           Type: Api
           Properties:
-            Path: /v1
+            Path: /api
             Method: post
             RestApiId: !Ref SaasApi
+  FeedbackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers/feedback.handler
+      Layers:
+        - !Ref CommonLayer
+      Architectures:
+        - x86_64
+      Policies: 
+        - Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:DescribeTable
+                  - dynamodb:ConditionCheckItem
+                Resource:
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/sam-feedbackform-Feedbacks"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/sam-feedbackform-Feedbacks/index/*"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/errorLogs"
+                  - !Sub "arn:aws:dynamodb:us-east-1:${AWS::AccountId}:table/errorLogs/index/*"
+      Events:
+        FeedbackPost:
+          Type: Api
+          Properties:
+            Path: /api/feedback
+            Method: post
+            RestApiId: !Ref SaasApi
+      Environment:
+        Variables:
+          FEEDBACKS_TABLE_NAME: "sam-feedbackform-Feedbacks"
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -102,11 +142,11 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
         CustomErrorResponses:
           - ErrorCode: 403
-            ResponseCode: 200
+            ResponseCode: 403
             ResponsePagePath: /index.html
             ErrorCachingMinTTL: 0
           - ErrorCode: 404
-            ResponseCode: 200
+            ResponseCode: 404
             ResponsePagePath: /index.html
             ErrorCachingMinTTL: 0
         Origins:
@@ -138,7 +178,7 @@ Resources:
               Forward: none
         # Routing for API calls
         CacheBehaviors:
-          - PathPattern: /v1/*
+          - PathPattern: /api/*
             TargetOriginId: ApigOrigin
             ViewerProtocolPolicy: redirect-to-https
             AllowedMethods: 
@@ -184,4 +224,4 @@ Outputs:
     Value: !Sub "https://${DomainName}"
   BackendApiURL:
     Description: Unified APIG endpoint via CF
-    Value: !Sub "https://${DomainName}/v1"
+    Value: !Sub "https://${DomainName}/api"

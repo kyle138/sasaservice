@@ -153,7 +153,7 @@ function Contact() {
         return resp.json();
       })
       .then((data) => {
-        console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
+        // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
         const resp = data.response;
 
         setResponse(1);

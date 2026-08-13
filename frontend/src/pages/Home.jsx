@@ -33,7 +33,7 @@ function Home() {
     .then((resp) => resp.json())
     .then((data) => {
       const resp = JSON.parse(data.response);
-      console.debug(`Get response: ${JSON.stringify(data.response,null,2)}`); // DEBUG
+      // console.debug(`Get response: ${JSON.stringify(data.response,null,2)}`); // DEBUG
       setLetter(resp.letter || '');
       setResponse(<p>Letter: {resp?.letter}<br/>Description: {resp?.description}</p>);
     })
@@ -65,12 +65,12 @@ function Home() {
   function handleInteractive() {
     if(interactive) handleLogo();
     setInteractive(!interactive);
-    console.log(`interactive: ${interactive}`); //DEBUG
+    // console.log(`interactive: ${interactive}`); //DEBUG
   } // End handleInteractive
 
   // Test if supplied letter is an 'S'
   function handleLetter(e) {
-    console.log(`handleLetter:e:: ${e.target.value}`); // DEBUG
+    // console.log(`handleLetter:e:: ${e.target.value}`); // DEBUG
     if (e.target.value.length != 1) {
       setLetter('');
       return;
@@ -90,7 +90,7 @@ function Home() {
     .then((data) => {
       // console.debug(`data: ${JSON.stringify(data,null,2)}`); // DEBUG
       const resp = JSON.parse(data.response);
-      console.debug(`Post response: ${JSON.stringify(resp,null,2)}`); // DEBUG
+      // console.debug(`Post response: ${JSON.stringify(resp,null,2)}`); // DEBUG
 
       // Set the "is an | is not an | etc... based on verdict"
       const isAn = resp?.verdict 

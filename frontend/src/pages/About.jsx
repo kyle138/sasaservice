@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
 import Row from 'react-bootstrap/Row';
@@ -43,7 +44,27 @@ const respPostAmbiguous = {
   "description": "Dollar Sign"
 };
 
+
 function About() {
+  const API = 'https://sasaservice.com/api/';
+  
+  // Default values for Esses
+  const [esses, setEsses] = useState(["S","Ś","Ŝ","Ş","Ṥ"]);
+
+  // Make API request for 5 random Esses
+  useEffect(() => {
+    fetch(API+'?quantity=5')
+    .then((resp) => resp.json())
+    .then((data) => {
+      setEsses(JSON.parse(data.response));
+      // console.debug(`GET response: ${esses}`); // DEBUG
+    })
+    .catch((err) => {
+      // API call failed, let default Esses stand.
+      console.error(`GET error: `,err);
+    });
+  }, []); // End useEffect
+
   return (
     <Container className='vt323-regular crt mb-5'>
       <Jumbo />
@@ -53,7 +74,7 @@ function About() {
         </Col>
         <Col sm={9}>
           <p>
-            Welcome to <span className='vt323-glow vt323-bold'>'S' as a Service ('S'aaS)</span> which is the world’s premier, enterprise-grade cloud solution for mission-critical 'S' identification and verification. Built to scale across modern distributed architectures, our sub-millisecond RESTful API empowers <span className='vt323-glow'>S</span>oftware Engineers, <span className='vt323-glow'>S</span>ystems Architects, <span className='vt323-glow'>S</span>cholars, <span className='vt323-glow'>S</span>alami Makers, and <span className='vt323-glow'>S</span>ophists worldwide to fetch, validate, and disambiguate any letter 'S' variant across the Unicode spectrum. Stop guessing if that squigly character counts as an 'S' and let <span className='vt323-glow vt323-bold'>'S'aaS</span> handle the heavy lifting!
+            Welcome to <span className='vt323-glow vt323-bold'>'S' as a Service ('S'aaS)</span> which is the world’s premier, enterprise-grade cloud solution for mission-critical 'S' identification and verification. Built to scale across modern distributed architectures, our sub-millisecond RESTful API empowers <span className='vt323-glow'>{esses[0]}</span>oftware Engineers, <span className='vt323-glow'>{esses[1]}</span>ystems Architects, <span className='vt323-glow'>{esses[2]}</span>cholars, <span className='vt323-glow'>{esses[3]}</span>alami Makers, and <span className='vt323-glow'>{esses[4]}</span>ophists worldwide to fetch, validate, and disambiguate any letter 'S' variant across the Unicode spectrum. Stop guessing if that squigly character counts as an 'S' and let <span className='vt323-glow vt323-bold'>'S'aaS</span> handle the heavy lifting!
           </p>
         </Col>
       </Row>

@@ -128,6 +128,17 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
+  StaticAssetResponseHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: StaticAssetExpiresPolicy
+        CustomHeadersConfig:
+          Items:
+            # Modern HTTP/1.1 cache control (Recommended)
+            - Header: Cache-Control
+              Value: "public, max-age=31536000, immutable"
+              Override: true
   WebsiteDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -142,13 +153,13 @@ Resources:
           MinimumProtocolVersion: TLSv1.2_2021
         CustomErrorResponses:
           - ErrorCode: 403
-            ResponseCode: 403
+            ResponseCode: 200
             ResponsePagePath: /index.html
-            ErrorCachingMinTTL: 0
+            ErrorCachingMinTTL: 86400
           - ErrorCode: 404
-            ResponseCode: 404
+            ResponseCode: 200
             ResponsePagePath: /index.html
-            ErrorCachingMinTTL: 0
+            ErrorCachingMinTTL: 86400
         Origins:
           # Static S3 assets
           - Id: S3Origin
@@ -172,10 +183,9 @@ Resources:
           CachedMethods:
             - HEAD
             - GET
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          Compress: true
+          ResponseHeadersPolicyId: !Ref StaticAssetResponseHeadersPolicy
         # Routing for API calls
         CacheBehaviors:
           - PathPattern: /api/*
@@ -189,10 +199,7 @@ Resources:
               - OPTIONS
               - PUT
               - PATCH
-            # CachedMethods: 
-            #   - HEAD
-            #   - GET
-            DefaultTTL: 0 # To bypass CDN cache for dynami API calls
+            DefaultTTL: 0 # To bypass CDN cache for dynamic API calls
             MaxTTL: 0
             MinTTL: 0
             ForwardedValues:

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://sasaservice.com/sitemap.xml
+
+Game: Tic-Tac-Toe
+Number-of-Players: 0

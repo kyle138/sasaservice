@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import NotFound404 from './pages/NotFound404';
 import CookieConsent from './utils/CookieConsent';
 import './App.css'
+import SwipeWrapper from './utils/SwipeWrapper';
 
 // Check if cookies consented
 ReactGA.gtag('consent', 'default', {
@@ -68,12 +69,14 @@ function App() {
     <BrowserRouter>
       <NavBar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<NotFound404 />} />
-    </Routes>
+      <SwipeWrapper>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound404 />} />
+      </Routes>
+      </SwipeWrapper>
 
     <CookieConsent />
 

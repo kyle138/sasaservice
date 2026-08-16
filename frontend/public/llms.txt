@@ -1,0 +1,24 @@
+# 'S' as a Service ('S'aaS)
+
+> The world's premier enterprise-grade, cloud-native, dynamically scaling single-character microservice platform. Delivering high-availability 'S' payloads and real-time graphemic validation with an un-guaranteed 99.9999% SLA.
+
+## Overview
+
+While legacy cloud architecture focused on Software (SaaS), Infrastructure (IaaS), and Platforms (PaaS), 'S' as a Service ('S'aaS) satisfies the fundamental building block of the Web 2.0 promise: delivering high-throughput, low-latency 'S' characters directly to modern web applications.
+
+## Core Capabilities
+
+- **Random 'S' Generation:** Retrieve high-availability, enterprise-grade 'S' characters complete with full lexicographical descriptions via GET requests.
+- **Graphemic Validation:** POST existing single-character payloads to receive instantaneous boolean verification and optional architectural breakdowns.
+- **Enterprise Reliability:** Backed by an un-guaranteed 99.9999% SLA.
+
+## Key Pages & Documentation
+
+- [Homepage](https://sasaservice.com/): Core platform overview, live interactive demo, and API tier breakdown.
+- [About](https://sasaservice.com/about): Technical architecture, mission statement, and systemic rationale for single-letter microservice orchestration.
+- [Contact](https://sasaservice.com/contact): Enterprise sales, dedicated support, and SLA inquiries.
+
+## API Specification Summary
+
+- `GET /api/`: Returns a JSON payload containing a validated 'S' character and associated lexicographical metadata.
+- `POST /api/`: Accepts JSON string `Data: {"letter":"ŝ","verbose":true}` and returns `{"verdict": true,"description": "Latin Small Letter S with circumflex"}`.

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import CoolS from '../assets/CoolS.svg';
 import Row from 'react-bootstrap/Row';
@@ -15,16 +15,37 @@ import Copyright from '../utils/Copyright';
 
 
 function Home() {
-    const [interactive, setInteractive] = useState(false);
-    const [response, setResponse] = useState(<p>Loading...</p>);
-    const [letter, setLetter] = useState('');
-
-    const API = 'https://sasaservice.com/api/';
-
-    const rads = [
-      {value: 'int', label: "Interactive Mode"},
-      {value: 'rdm', label: "Random 'S'"}
-    ];
+  const [interactive, setInteractive] = useState(false);
+  const [response, setResponse] = useState(<p>Loading...</p>);
+  const [letter, setLetter] = useState('');
+  // @ts-ignore
+  const inputRef = useRef(null);
+  
+  const API = 'https://sasaservice.com/api/';
+  
+  const rads = [
+    {value: 'int', label: "Interactive Mode"},
+    {value: 'rdm', label: "Random 'S'"}
+  ];
+  
+  // Prevent backspace from navigating back in browser history
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Backspace') {
+        const target = event.target;
+        const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+        const isEditable = target.isContentEditable || isInput;
+        const isReadOnly = target.readOnly || target.disabled;
+  
+        if (!isEditable || isReadOnly) {
+          event.preventDefault();
+        }
+      }
+    };
+  
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // ****************
   // Make API request
@@ -73,6 +94,18 @@ function Home() {
     // console.log(`handleLetter:e:: ${e.target.value}`); // DEBUG
     if (e.target.value.length != 1) {
       setLetter('');
+
+      // Defer focus until React finishes DOM reconciliation
+      setTimeout(() => {
+        // @ts-ignore
+        inputRef.current?.focus();
+      }, 0);
+      
+      // if (inputRef.current) {
+      //   // @ts-ignore
+      //   inputRef.current?.focus();
+      //   console.log("PING!");
+      // }
       return;
     }
 
@@ -136,14 +169,15 @@ function Home() {
               <Form.Label column sm={5} className='text-start fs-1' htmlFor="letter-input">Letter to check: </Form.Label>
               <Col sm={2} className='invFormInput ps-0'>
                 <Form.Control
+                  ref={inputRef}  
                   id="letter-input"
                   type="text"
                   size="lg"
                   className="bg-dark vt323-green crt-input fs-1"
                   maxLength={1}
                   value={letter}
-                  onFocus={(event) => event.currentTarget.select()}
-                  onClick={(event) => event.currentTarget.select()}
+                  onFocus={(event) => event.currentTarget.value && event.currentTarget.select()}
+                  onClick={(event) => event.currentTarget.value && event.currentTarget.select()}
                   onChange={handleLetter}
                 />
               </Col>

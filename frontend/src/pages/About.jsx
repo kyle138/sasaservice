@@ -53,16 +53,34 @@ function About() {
 
   // Make API request for 5 random Esses
   useEffect(() => {
-    fetch(API+'?quantity=5')
-    .then((resp) => resp.json())
-    .then((data) => {
-      setEsses(JSON.parse(data.response));
-      // console.debug(`GET response: ${esses}`); // DEBUG
-    })
-    .catch((err) => {
-      // API call failed, let default Esses stand.
-      console.error(`GET error: `,err);
-    });
+    let callCount = 0;
+    const MAX_CALLS = 20;
+
+    const fetchEsses = () => {
+      fetch(API+'?quantity=5')
+      .then((resp) => resp.json())
+      .then((data) => {
+        setEsses(JSON.parse(data.response));
+        // console.debug(`GET response: ${esses}`); // DEBUG
+      })
+      .catch((err) => {
+        // API call failed, let default Esses stand.
+        console.error(`GET error: `,err);
+      });
+    };  // End fetchEsses
+
+    fetchEsses();
+    callCount++;
+    
+    const intervalId = setInterval(() => {
+      if (callCount < MAX_CALLS) {
+        fetchEsses();
+        callCount++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 3000);
+
   }, []); // End useEffect
 
   return (

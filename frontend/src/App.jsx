@@ -26,6 +26,26 @@ if (window.location.hostname !== 'localhost') {
   ReactGA.initialize('G-EFS4PHD3ZX');
 }
 
+function PageTitle() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const titles={
+      '/': "'S' as a Service",
+      '/about': "'S' as a Service - About",
+      '/contact': "'S' as a Service - Contact"
+    };
+
+    // Catch-all
+    document.title = titles[location.pathname] || "'S' as a Service - 404 Page Not Found";
+
+    // Track GA4 title on route change
+    ReactGA.send({hitType: 'pageview', page: location.pathname });
+  }, [location]);
+
+  return null;
+} // End PageTitle
+
 function NavBar() {
   const location = useLocation();
 
@@ -67,6 +87,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <PageTitle />
       <NavBar />
 
       <SwipeWrapper>

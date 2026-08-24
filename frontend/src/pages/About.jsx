@@ -233,33 +233,33 @@ function About() {
                 <h1 className='bitcount vt323-green fs-1'>FAQs</h1>
               </Col>
               <Col sm={9}>
-                <p>Hey, you have questions and 'S' as a Service has your answers! 'S'aaS adheres to a strict policy of openness, transparency, and accountability. If you don't see your question listed below feel free to Contact us!</p>
+                <p>Hey, you have questions and 'S' as a Service has your answers! 'S'aaS adheres to a strict policy of openness, transparency, and accountability. If you don't see your question listed below feel free to <Link to="/contact">Contact us!</Link></p>
               </Col>
             </Row>
             <Row className='py-2 px-5 mx-3 api-row' >
               <Card bg={'dark'} className='rounded-0 vt323-green'>
-                <Card.Header className='fs-3'>Why? I mean, just, why?</Card.Header>
-                <Card.Body>I know, right?</Card.Body>
+                <Card.Header className='fs-3'><span className='bitcount vt323-green fs-2'>Q: </span>Why? I mean, just, why?</Card.Header>
+                <Card.Body><span className='bitcount vt323-green fs-2'>A: </span>I know, right?</Card.Body>
               </Card>
             </Row>
             <Row className='py-2 px-5 mx-3 api-row' >
               <Card bg={'dark'} className='rounded-0 vt323-green'>
-                <Card.Header className='fs-3'>I was trying to integrate this into our enterprise stack, but I need the API parameters.</Card.Header>
-                <Card.Body>Please see our full API documentation by selecting the 'API' section from the menu above.</Card.Body>
+                <Card.Header className='fs-3'><span className='bitcount vt323-green fs-2'>Q: </span>I was trying to integrate this into our enterprise stack, but I need the API parameters.</Card.Header>
+                <Card.Body><span className='bitcount vt323-green fs-2'>A: </span>Please see our full API documentation by selecting the 'API' section from the menu above.</Card.Body>
               </Card>
             </Row>
             <Row className='py-2 px-5 mx-3 api-row' >
               <Card bg={'dark'} className='rounded-0 vt323-green'>
-                <Card.Header className='fs-3'>Is this a per call or a per "S" billing format?</Card.Header>
-                <Card.Body>
+                <Card.Header className='fs-3'><span className='bitcount vt323-green fs-2'>Q: </span>Is this a per call or a per "S" billing format?</Card.Header>
+                <Card.Body><span className='bitcount vt323-green fs-2'>A: </span>
                   We bill per API call, per 'S' returned, and charge a 15% egress fee for the whitespace surrounding the character. Capital 'S's are billed under our Standard Service plan however lowercase 'S's require an active developer license. Plus a nominal 'Predictive Character Surcharge' every time the backend functions think about an 'S'. Pretty standard stuff, it's all in our SLA.
                 </Card.Body>
               </Card>
             </Row>
             <Row className='py-2 px-5 mx-3 api-row' >
               <Card bg={'dark'} className='rounded-0 vt323-green'>
-                <Card.Header className='fs-3'>Do you offer any bulk discounts?</Card.Header>
-                <Card.Body>
+                <Card.Header className='fs-3'><span className='bitcount vt323-green fs-2'>Q: </span>Do you offer any bulk discounts?</Card.Header>
+                <Card.Body><span className='bitcount vt323-green fs-2'>A: </span>
                   Make 3 easy API calls and we'll throw in the fourth one for free!!!
                 </Card.Body>
               </Card>

@@ -10,6 +10,10 @@ body {
   color: #414549;
 }
 
+a {
+  color: #A7C942;
+}
+
 .container {
   min-width: 320px;
 }

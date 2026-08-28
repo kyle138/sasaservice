@@ -111,6 +111,34 @@ Resources:
       Environment:
         Variables:
           FEEDBACKS_TABLE_NAME: "sam-feedbackform-Feedbacks"
+  CronServedFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers/cronserved.handler
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref WebsiteBucket
+          APIG_NAME: !Ref SaasApi
+          STAGE_NAME: "prod"
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/served.json"
+          - Effect: Allow
+            Action: 
+              - cloudwatch:GetMetricData
+            Resource: "*"
+      Events:
+        NightlyCron:
+          Type: Schedule
+          Properties:
+            Schedule: cron(58 23 * * ? *) # Two minutes to midnight
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:

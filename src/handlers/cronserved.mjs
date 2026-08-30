@@ -32,7 +32,9 @@ async function loadServedFromS3(bucket,key) {
   return await s3Client.send(new GetObjectCommand(s3LParams))
   .then(async (resp) => {
     console.debug(`loadServedFromS3:s3Client:resp:: `,resp); // DEBUG
-    settings.served = JSON.parse(await resp.Body.transformToString());
+    const respString = await resp.Body.transformToString();
+    console.debug(`respString: ${respString}`); // DEBUG
+    settings.served = JSON.parse(respString);
     console.debug(`served assigned to settings.`); // DEBUG
     return;
   })  // End s3Client.send.then
@@ -187,7 +189,7 @@ export const handler = async (event, context) => {
     console.debug(`Error:..`,err); // DEBUG
   
   
-    await handleError("Try/Catch",err,context);
+    await handleError("Try/Catch",err.message,context);
     return err;
 
   } // End main try/catch

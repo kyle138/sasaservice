@@ -7,6 +7,7 @@
 // Load modules
 import { s3Client } from "../libs/s3Client.mjs";
 import { cwClient } from "../libs/cloudWatchClient.mjs";
+import { handleError } from "../libs/handleError.mjs";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { GetMetricDataCommand } from "@aws-sdk/client-cloudwatch";
 
@@ -17,8 +18,8 @@ const settings = {};
 // loadServedFromS3
 // Load the current served.json from S3
 // Params:
-// bucket: The S3 bucket name.
-// key: The object key name.
+// bucket (string): The S3 bucket name.
+// key (string): The object key name.
 async function loadServedFromS3(bucket,key) {
   console.debug(`loadServedFromS3 bucket: ${bucket} key: ${key}`); // DEBUG
   
@@ -38,15 +39,47 @@ async function loadServedFromS3(bucket,key) {
   .catch((err) => {
     console.error(`loadServedFromS3:s3Client:err:: `,err);
     throw err;
-  }); // End s3Client.send
+  }); // End s3Client.send.catch
 } // end loadServedFromS3
+
+//
+// putServedToS3
+// Put the updated served.json in S3
+// Params:
+// bucket (string): The S3 bucket name.
+// key (string): The object key name.
+// payload (object): The new Payload to write to S3 in JSON
+async function putServedToS3(bucket, key, payload) {
+  console.debug(`putServedToS3 bucket: ${bucket} key: ${key}`); // DEBUG
+  console.debug(`putServedToS3 payload: ${JSON.stringify(payload,null,2)}`); // DEBUG
+
+  // Set S3 put commands
+  const s3PParams = {
+    Bucket: bucket,
+    Key: key,
+    Body: JSON.stringify(payload,null,2),
+    ContentType: "application/json",
+  };  // End s3PParams
+
+  return await s3Client.send(new PutObjectCommand(s3PParams))
+  .then(async (resp) => {
+    console.debug(`putServedToS3:s3Client:resp:: `,resp); // DEBUG
+    return;
+  })  // End s3Client.send.then
+  .catch((err) => {
+    console.error(`putServedToS3:s3Client:err:: `,err);
+    throw err;
+  }); // End s3Client.send.catch
+} // End putServedToS3
 
 //
 // getMetricsFromAPIG
 // Get the metrics from APIG for GET and POST requests since last update
 // Params:
+// apig (string): The API Gateway ID
+// stage (string): The API Gateway stage
 // 
-async function getMetricsFromAPIG(apig) {
+async function getMetricsFromAPIG(apig,stage) {
   const endTime = new Date();
   let startTime = settings?.served?.lastUpdated;
 
@@ -56,8 +89,57 @@ async function getMetricsFromAPIG(apig) {
 
   const periodInSeconds = Math.max(60, Math.floor((endTime.getTime() - startTime().getTime()) / 1000));
 
-  // *********** PICK U8P HERE... ****************
+  const cwParams = {
+    StartTime: startTime,
+    EndTime: endTime,
+    MetricDataQueries: [
+      {
+        Id: "get_requests",
+        MetricStat: {
+          Metric: {
+            Namespace: "AWS/ApiGateway",
+            MetricName: "Count",
+            Dimensions: [
+              { Name: "ApiId", Value: apig},
+              { Name: "Stage", Value: stage},
+              { Name: "Method", Value: "GET"},
+            ],  // End Dimensions
+          },  // End Metric
+          Period: periodInSeconds,
+          Stat: "Sum",
+        },  // End MetricStat
+      }, // End get_requests
+      {
+        Id: "post_requests",
+        MetricStat: {
+          Metric: {
+            Namespace: "AWS/ApiGateway",
+            MetricName: "Count",
+            Dimensions: [
+              { Name: "ApiId", Value: apig},
+              { Name: "Stage", Value: stage},
+              { Name: "Method", Value: "POST"},
+            ],  // End Dimensions
+          }, // End Metric
+          Period: periodInSeconds,
+          Stat: "Sum",
+        }, // End MetricStat
+      },  // End post_requests
+    ],  // End MetricDataQueries
+  };  // End cwParams
 
+  const response = await cwClient.send(new GetMetricDataCommand(cwParams));
+  console.debug(`cwClient:response:: JSON.stringify(response,null,2)`); // DEBUG
+
+  const getCount = response.MetricDataResults.find((r) => r.Id === "get_requests")?.Values[0] || 0;
+  const postCount = response.MetricDataResults.find((r) => r.Id === "post_requests")?.Values[0] || 0;
+
+  return {
+    LastUpdated: startTime.toISOString(),
+    GetRequests: getCount,
+    PostRequests: postCount,
+    TotalRequests: getCount + postCount,
+  };
 } // End getMetricsFromAPIG
 
 
@@ -90,24 +172,23 @@ export const handler = async (event, context) => {
   }
 
   try {
+    // Retrieve existing served.json from S3
+    await loadServedFromS3(process.env.S3_BUCKET_NAME,"data/served.json");
+    console.debug(`settings: `,JSON.stringify(settings,null,2)); // DEBUG
 
+    // ********************
+    // getMetricsFromAPIG here
 
-    // Post obj to Dynamo
-    await postDynamo(eventObj);
+    // ********************
+    // putServedToS3 here
 
-    return createResponseObject({
-      code: '200',
-      message: "Hailing frequencies open.",
-      cors: corsHeaders
-    });
-
+    return;
   } catch (err) {
     console.debug(`Error:..`,err); // DEBUG
   
   
-    await handleError("Promise.all.catch",cro.message,context);
-    console.debug(`catch:cro:: `,JSON.stringify(cro,null,2)); // DEBUG
-    return createResponseObject(cro);
+    await handleError("Try/Catch",err,context);
+    return err;
 
   } // End main try/catch
 

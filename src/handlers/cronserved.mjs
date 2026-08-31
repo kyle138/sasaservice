@@ -82,62 +82,67 @@ async function putServedToS3(bucket, key, payload) {
 // stage (string): The API Gateway stage
 // 
 async function getMetricsFromAPIG(apig,stage) {
-  const endTime = new Date();
-  let startTime = settings?.served?.lastUpdated;
+  // const endTime = new Date();
+  // const endTime = new Date("2026-08-29T23:59:59.000Z");
 
+  const now = new Date();
+  // Set EndTime to midnight (00:00:00.000 UTC) of the current day
+  const endTime = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    0, 0, 0, 0
+  )); // End endtime
+
+  // ******************************
+  // UPDATE startTime to 00:00:00 of the date stated in lastUpdated. (see Gemini)
+  let startTime = settings?.served?.lastUpdated 
+    ? new Date(settings.served.lastUpdated) 
+    : null;
+
+  console.debug(`startTime: ${startTime}`); //DEBUG
   if(!startTime || isNaN(startTime.getTime())) {
     startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000); // default to 24 hours ago
   }
 
-  const periodInSeconds = Math.max(60, Math.floor((endTime.getTime() - startTime().getTime()) / 1000));
+  startTime = new Date("2026-08-29T00:00:00.000Z");
+
+  // Ensure periodInSeconds is at least 60 AND a multiple of 60
+  const diffInSeconds = Math.max(60, Math.floor((endTime.getTime() - startTime.getTime()) / 1000));
+  const periodInSeconds = Math.ceil(diffInSeconds / 60) * 60;
 
   const cwParams = {
     StartTime: startTime,
     EndTime: endTime,
     MetricDataQueries: [
       {
-        Id: "get_requests",
+        Id: "total_requests",
         MetricStat: {
           Metric: {
             Namespace: "AWS/ApiGateway",
             MetricName: "Count",
             Dimensions: [
-              { Name: "ApiId", Value: apig},
-              { Name: "Stage", Value: stage},
-              { Name: "Method", Value: "GET"},
-            ],  // End Dimensions
-          },  // End Metric
-          Period: periodInSeconds,
+              // { Name: "ApiId", Value: apig },
+              { Name: "ApiName", Value: "sasaservice" },
+              { Name: "Stage", Value: stage },
+            ],
+          },
+          Period: 3600,
           Stat: "Sum",
-        },  // End MetricStat
-      }, // End get_requests
-      {
-        Id: "post_requests",
-        MetricStat: {
-          Metric: {
-            Namespace: "AWS/ApiGateway",
-            MetricName: "Count",
-            Dimensions: [
-              { Name: "ApiId", Value: apig},
-              { Name: "Stage", Value: stage},
-              { Name: "Method", Value: "POST"},
-            ],  // End Dimensions
-          }, // End Metric
-          Period: periodInSeconds,
-          Stat: "Sum",
-        }, // End MetricStat
-      },  // End post_requests
-    ],  // End MetricDataQueries
+        },
+      },
+    ],
   };  // End cwParams
+  console.debug(`cwParams: `,JSON.stringify(cwParams,null,2)); // DEBUG
 
   const response = await cwClient.send(new GetMetricDataCommand(cwParams));
-  console.debug(`cwClient:response:: JSON.stringify(response,null,2)`); // DEBUG
+  console.debug(`cwClient:response:: `,JSON.stringify(response,null,2)); // DEBUG
 
   const getCount = response.MetricDataResults.find((r) => r.Id === "get_requests")?.Values[0] || 0;
   const postCount = response.MetricDataResults.find((r) => r.Id === "post_requests")?.Values[0] || 0;
 
   return {
-    LastUpdated: startTime.toISOString(),
+    LastUpdated: endTime.toISOString(),
     GetRequests: getCount,
     PostRequests: postCount,
     TotalRequests: getCount + postCount,
@@ -178,8 +183,13 @@ export const handler = async (event, context) => {
     await loadServedFromS3(process.env.S3_BUCKET_NAME,"data/served.json");
     console.debug(`settings: `,JSON.stringify(settings,null,2)); // DEBUG
 
-    // ********************
-    // getMetricsFromAPIG here
+    // Retrieve metrics from API Gateway
+    const metrics = await getMetricsFromAPIG(
+      process.env.APIG_NAME,
+      process.env.STAGE_NAME
+    );
+    console.debug(`API Gateway Metrics: `,JSON.stringify(metrics,null,2)); // DEBUG
+
 
     // ********************
     // putServedToS3 here

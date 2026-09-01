@@ -61,6 +61,7 @@ async function putServedToS3(bucket, key, payload) {
     Key: key,
     Body: JSON.stringify(payload,null,2),
     ContentType: "application/json",
+    CacheControl: "public, max-age=300, must-revalidate",
   };  // End s3PParams
 
   return await s3Client.send(new PutObjectCommand(s3PParams))
@@ -82,10 +83,7 @@ async function putServedToS3(bucket, key, payload) {
 // stage (string): The API Gateway stage
 // 
 async function getMetricsFromAPIG(apig,stage) {
-  // const endTime = new Date();
-  // const endTime = new Date("2026-08-29T23:59:59.000Z");
-
-  const now = new Date();
+  const now = new Date(); // Set now to now, like now. 
   // Set EndTime to midnight (00:00:00.000 UTC) of the current day
   const endTime = new Date(Date.UTC(
     now.getUTCFullYear(),
@@ -94,22 +92,31 @@ async function getMetricsFromAPIG(apig,stage) {
     0, 0, 0, 0
   )); // End endtime
 
-  // ******************************
-  // UPDATE startTime to 00:00:00 of the date stated in lastUpdated. (see Gemini)
-  let startTime = settings?.served?.lastUpdated 
-    ? new Date(settings.served.lastUpdated) 
+  // Set default startime of 24 hours ago
+  let startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
+  let lastRuntime = settings?.served?.LastUpdated 
+    ? new Date(settings.served.LastUpdated) 
     : null;
-
-  console.debug(`startTime: ${startTime}`); //DEBUG
-  if(!startTime || isNaN(startTime.getTime())) {
-    startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000); // default to 24 hours ago
+  
+  // If we have the last run time override default 24hours with 00:00:00 of last run date.
+  if(!isNaN(lastRuntime.getTime())) {
+    startTime = new Date(Date.UTC(
+      lastRuntime.getUTCFullYear(),
+      lastRuntime.getUTCMonth(),
+      lastRuntime.getUTCDate(),
+      0, 0, 0, 0
+    ));
   }
+  console.debug(`startTime: ${startTime}`); //DEBUG
 
-  startTime = new Date("2026-08-29T00:00:00.000Z");
-
-  // Ensure periodInSeconds is at least 60 AND a multiple of 60
-  const diffInSeconds = Math.max(60, Math.floor((endTime.getTime() - startTime.getTime()) / 1000));
-  const periodInSeconds = Math.ceil(diffInSeconds / 60) * 60;
+  // Check if last run time was less than 24 hours ago
+  if ((endTime.getTime() - startTime.getTime()) < 24 * 60 * 60 * 1000) {
+    console.log(
+      `Execution skipped, less than 24 hours since last execution. ` + 
+      `StartTime: ${startTime.toISOString()}, EndTime: ${endTime.toISOString()}`
+    );
+    return null;  // Exit before pulling new metrics. 
+  }
 
   const cwParams = {
     StartTime: startTime,
@@ -123,7 +130,7 @@ async function getMetricsFromAPIG(apig,stage) {
             MetricName: "Count",
             Dimensions: [
               // { Name: "ApiId", Value: apig },
-              { Name: "ApiName", Value: "sasaservice" },
+              { Name: "ApiName", Value: apig },
               { Name: "Stage", Value: stage },
             ],
           },
@@ -138,20 +145,57 @@ async function getMetricsFromAPIG(apig,stage) {
   const response = await cwClient.send(new GetMetricDataCommand(cwParams));
   console.debug(`cwClient:response:: `,JSON.stringify(response,null,2)); // DEBUG
 
-  const getCount = response.MetricDataResults.find((r) => r.Id === "get_requests")?.Values[0] || 0;
-  const postCount = response.MetricDataResults.find((r) => r.Id === "post_requests")?.Values[0] || 0;
+  const results = response.MetricDataResults.find((r) => r.Id === "total_requests");
 
   return {
     LastUpdated: endTime.toISOString(),
-    GetRequests: getCount,
-    PostRequests: postCount,
-    TotalRequests: getCount + postCount,
+    TotalRequests: results?.Values?.reduce((sum, value) => sum + value, 0) || 0
   };
 } // End getMetricsFromAPIG
 
+//
+// formatServedMessage
+// Formats the ServedMessage based on total requests
+// Params:
+// count (number): The current number of total requests
+// Return (string): The Total Served message.
+function formatServedMessage(count) {
+  if (typeof count !== "number" || count < 0) {
+    return "Over NaN 'S's Served!"
+  }
 
+  // Max out at 99 Billion Served, just like McD's
+  if (count > 99000000000) {
+    return "Over 99 Billion 'S's Served!";
+  }
 
+  // Set thresholds for message.
+  const units = [
+    { threshold: 1e9, label: "Billion" },
+    { threshold: 1e6, label: "Million" },
+    { threshold: 1e3, label: "Thousand" }
+  ];
 
+  for(const { threshold, label } of units) {
+    if (count>=threshold) {
+      const rawValue = count / threshold;
+      let formattedNumber;
+
+      if (rawValue >= 100) {
+        // round down to nearest hundred
+        formattedNumber = Math.floor(rawValue / 100) * 100;
+      } else if (rawValue >= 10) {
+        // round down to nearest 10
+        formattedNumber = Math.floor(rawValue / 10) * 10;
+      } else {
+        // round down to nearest integer
+        formattedNumber = Math.floor(rawValue);
+      }
+
+      return `Over ${formattedNumber} ${label} 'S's Served!`;
+    } // End if
+  } // End for loop
+} // End formatServedMessage
 
 // ************
 // Main handler
@@ -188,11 +232,31 @@ export const handler = async (event, context) => {
       process.env.APIG_NAME,
       process.env.STAGE_NAME
     );
+    
+    // If metrics is null...
+    if (metrics === null) {
+      console.log(`Shut'er down`);
+      return;
+    }
+
+    // Keep going with metrics.     
     console.debug(`API Gateway Metrics: `,JSON.stringify(metrics,null,2)); // DEBUG
 
+    // Add updated metrics and saved to S3
+    const TRL = settings.served.TotalRequests + metrics.TotalRequests;
 
-    // ********************
-    // putServedToS3 here
+    const updated = {
+      LastUpdated: metrics.LastUpdated,
+      TotalRequests: TRL,
+      ServedMessage: formatServedMessage(TRL)
+    };
+
+    // Save the updated served.json to S3
+    await putServedToS3(
+      process.env.S3_BUCKET_NAME,
+      "data/served.json",
+      updated
+    );
 
     return;
   } catch (err) {

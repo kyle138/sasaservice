@@ -24,6 +24,7 @@ Resources:
   SaasApi:
     Type: AWS::Serverless::Api
     Properties:
+      Name: "sasaservice"
       StageName: prod
       # Ratelimits 
       MethodSettings:
@@ -121,7 +122,7 @@ Resources:
       Environment:
         Variables:
           S3_BUCKET_NAME: !Ref WebsiteBucket
-          APIG_NAME: !Ref SaasApi
+          APIG_NAME: "sasaservice"
           STAGE_NAME: "prod"
       Policies:
         - Statement:

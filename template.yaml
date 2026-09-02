@@ -177,7 +177,7 @@ Resources:
             # Modern HTTP/1.1 cache control (Recommended)
             - Header: Cache-Control
               Value: "public, max-age=31536000, immutable"
-              Override: true
+              Override: false
   WebsiteDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:

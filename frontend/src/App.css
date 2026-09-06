@@ -163,6 +163,11 @@ a {
   border-color: #A7C942;
 }
 
+.served {
+  color: #A7C942;
+  text-align: center;
+}
+
 .rad {
   background-color: #302831;
   border-color: #A7C942;

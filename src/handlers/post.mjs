@@ -17,9 +17,18 @@ export const handler = async (event, context) => {
   console.log(`Received event: ${JSON.stringify(event,null,2)}`); // DEBUG:
 
   // Set CORS headers
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://sasaservice.com'
+  ];
+  const requestOrigin = event?.headers?.origin || event?.headers?.Origin; 
+  const corsOrigin = allowedOrigins.includes(requestOrigin)
+    ? requestOrigin
+    : "https://sasaservice.com";
+
   const corsHeaders = {
-    // allowOrigin: event?.headers?.origin || '*',
-    allowOrigin: '*',
+    // allowOrigin: '*',
+    allowOrigin: corsOrigin,
     allowMethods: 'OPTIONS,POST'
   };
 

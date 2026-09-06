@@ -252,7 +252,7 @@ function About() {
               <Card bg={'dark'} className='rounded-0 vt323-green'>
                 <Card.Header className='fs-3'><span className='bitcount vt323-green fs-2'>Q: </span>Is this a per call or a per "S" billing format?</Card.Header>
                 <Card.Body><span className='bitcount vt323-green fs-2'>A: </span>
-                  We bill per API call, per 'S' returned, and charge a 15% egress fee for the whitespace surrounding the character. Capital 'S's are billed under our Standard Service plan however lowercase 'S's require an active developer license. Plus a nominal 'Predictive Character Surcharge' every time the backend functions think about an 'S'. Pretty standard stuff, it's all in our SLA.
+                  We bill per API call, per 'S' returned, and charge a 15% egress fee for the whitespace surrounding the character. Capital 'S's are billed under our Standard Service plan however lowercase 'S's require an active developer license. Plus a nominal 'Predictive Character Surcharge' every time the backend functions think about an 'S'. Pretty standard stuff, it's all in our SLA.  /s
                 </Card.Body>
               </Card>
             </Row>

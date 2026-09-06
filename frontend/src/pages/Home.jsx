@@ -18,6 +18,8 @@ function Home() {
   const [interactive, setInteractive] = useState(false);
   const [response, setResponse] = useState(<p>Loading...</p>);
   const [letter, setLetter] = useState('');
+  const [servedMessage, setServedMessage] = useState("...");
+
   // @ts-ignore
   const inputRef = useRef(null);
   
@@ -63,6 +65,29 @@ function Home() {
       setResponse(<p>Failed to connect to backend.</p>)}
     );
   }, []);
+
+  // Get served message
+  useEffect(() => {
+    fetch('https://sasaservice.com/data/served.json')
+    .then((resp) => resp.json())
+    .then((data) => {
+      setServedMessage(data?.ServedMessage || "...");
+    })
+    .catch((err) => {
+      console.error(`GET served error: `,err);
+    });
+  }, []); // End get served message
+
+  // Served Message display
+  function ServedMessage() {
+    return (
+      <Row className='pt-4 px-5'>
+        <Col>
+          <h2 className='served vt323-regular py-2 fs-1'>{servedMessage}</h2>
+        </Col>
+      </Row>
+    );
+  } // End ServedMessage
 
   // Reset the form when logo clicked
   function handleLogo() {
@@ -250,6 +275,7 @@ function Home() {
         </Col>
       </Row>
       <Console />
+      <ServedMessage />
       <Copyright />
     </Container>
   ); // End return

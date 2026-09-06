@@ -35,7 +35,6 @@ Resources:
       Cors: 
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-        # AllowOrigin: !Sub "'https://${DomainName}'"
         AllowOrigin: "'*'"
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
@@ -159,6 +158,17 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+            AllowedOrigins:
+              - 'http://localhost:5173'   # Allows local Vite/React dev server
+              - 'https://sasaservice.com' # Allows production origin
+            MaxAge: 3600
   CloudFrontOAC:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
@@ -247,6 +257,20 @@ Resources:
                 - Authorization
               Cookies:
                 Forward: all
+          - PathPattern: /data/*
+            TargetOriginId: S3Origin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS                   # Must allow OPTIONS for browser CORS preflights
+            CachedMethods:
+              - GET
+              - HEAD
+            # Correct Managed Policy ID for CORS-S3Origin:
+            OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
+            # Managed Policy ID for CachingOptimized:
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:

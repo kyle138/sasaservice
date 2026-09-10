@@ -62,6 +62,11 @@ Resources:
             Path: /api
             Method: get
             RestApiId: !Ref SaasApi
+  GetFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${GetFunction}"
+      RetentionInDays: 180
   PostFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -78,6 +83,11 @@ Resources:
             Path: /api
             Method: post
             RestApiId: !Ref SaasApi
+  PostFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${PostFunction}"
+      RetentionInDays: 180
   FeedbackFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -111,6 +121,11 @@ Resources:
       Environment:
         Variables:
           FEEDBACKS_TABLE_NAME: "sam-feedbackform-Feedbacks"
+  FeedbackFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${FeedbackFunction}"
+      RetentionInDays: 180
   CronServedFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -149,6 +164,11 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: cron(5 0 * * ? *) # Runs every day at 00:05 AM UTC
+  CronServedFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CronServedFunction}"
+      RetentionInDays: 180
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:

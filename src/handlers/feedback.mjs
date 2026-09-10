@@ -21,8 +21,8 @@ const qoqmey=[];
 // @param {var} reqvar - the variable to check
 // @return true or throw error
 function validateRequiredVar(reqvar) {
-  // Is the envar a string and have some length?
-  console.log(`validateRequiredVar:reqvar:: ${reqvar}`);  // DEBUG
+  // Is the reqvar a string and have some length?
+  // console.log(`validateRequiredVar:reqvar:: ${reqvar}`);  // DEBUG
   if(typeof reqvar === 'string' && reqvar.trim().length > 0) {
     return true;
   } else {

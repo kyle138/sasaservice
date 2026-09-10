@@ -64,7 +64,7 @@ export const handler = async (event, context) => {
     } else {
       resp = {verdict: isLetterS(eventObj.letter)};
     } // End if verbose...isLetterS
-    console.debug(`isLetterS response: ${resp}`); // DEBUG
+    // console.debug(`isLetterS response: `,JSON.stringify(resp,null,2)); // DEBUG
     resp = JSON.stringify(resp); // Stringify the response for consistent output
     console.debug(`isLetterS response stringified: ${resp}`); // DEBUG
     

@@ -21,7 +21,7 @@ const settings = {};
 // bucket (string): The S3 bucket name.
 // key (string): The object key name.
 async function loadServedFromS3(bucket,key) {
-  console.debug(`loadServedFromS3 bucket: ${bucket} key: ${key}`); // DEBUG
+  // console.debug(`loadServedFromS3 bucket: ${bucket} key: ${key}`); // DEBUG
   
   // Set S3 load params
   const s3LParams = {
@@ -31,9 +31,9 @@ async function loadServedFromS3(bucket,key) {
 
   return await s3Client.send(new GetObjectCommand(s3LParams))
   .then(async (resp) => {
-    console.debug(`loadServedFromS3:s3Client:resp:: `,resp); // DEBUG
+    // console.debug(`loadServedFromS3:s3Client:resp:: `,resp); // DEBUG
     const respString = await resp.Body.transformToString();
-    console.debug(`respString: ${respString}`); // DEBUG
+    // console.debug(`respString: ${respString}`); // DEBUG
     settings.served = JSON.parse(respString);
     console.debug(`served assigned to settings.`); // DEBUG
     return;
@@ -52,7 +52,7 @@ async function loadServedFromS3(bucket,key) {
 // key (string): The object key name.
 // payload (object): The new Payload to write to S3 in JSON
 async function putServedToS3(bucket, key, payload) {
-  console.debug(`putServedToS3 bucket: ${bucket} key: ${key}`); // DEBUG
+  // console.debug(`putServedToS3 bucket: ${bucket} key: ${key}`); // DEBUG
   console.debug(`putServedToS3 payload: ${JSON.stringify(payload,null,2)}`); // DEBUG
 
   // Set S3 put commands
@@ -107,7 +107,7 @@ async function getMetricsFromAPIG(apig,stage) {
       0, 0, 0, 0
     ));
   }
-  console.debug(`startTime: ${startTime}`); //DEBUG
+  // console.debug(`startTime: ${startTime}`); //DEBUG
 
   // Check if last run time was less than 24 hours ago
   if ((endTime.getTime() - startTime.getTime()) < 24 * 60 * 60 * 1000) {
@@ -140,10 +140,10 @@ async function getMetricsFromAPIG(apig,stage) {
       },
     ],
   };  // End cwParams
-  console.debug(`cwParams: `,JSON.stringify(cwParams,null,2)); // DEBUG
+  // console.debug(`cwParams: `,JSON.stringify(cwParams,null,2)); // DEBUG
 
   const response = await cwClient.send(new GetMetricDataCommand(cwParams));
-  console.debug(`cwClient:response:: `,JSON.stringify(response,null,2)); // DEBUG
+  // console.debug(`cwClient:response:: `,JSON.stringify(response,null,2)); // DEBUG
 
   const results = response.MetricDataResults.find((r) => r.Id === "total_requests");
 
@@ -201,7 +201,7 @@ function formatServedMessage(count) {
 // Main handler
 // ************
 export const handler = async (event, context) => {
-  console.log(`Received event: ${JSON.stringify(event,null,2)}`); // DEBUG:
+  // console.log(`Received event: ${JSON.stringify(event,null,2)}`); // DEBUG:
 
   // Check if S3_BUCKET_NAME has been set as an environment variable
   if(!process.env.S3_BUCKET_NAME) {
@@ -225,7 +225,7 @@ export const handler = async (event, context) => {
   try {
     // Retrieve existing served.json from S3
     await loadServedFromS3(process.env.S3_BUCKET_NAME,"data/served.json");
-    console.debug(`settings: `,JSON.stringify(settings,null,2)); // DEBUG
+    // console.debug(`settings: `,JSON.stringify(settings,null,2)); // DEBUG
 
     // Retrieve metrics from API Gateway
     const metrics = await getMetricsFromAPIG(
